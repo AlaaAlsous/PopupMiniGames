@@ -32,7 +32,42 @@ namespace MiniGames
             this.Controls.Add(difficultyButton);
             this.Controls.Add(exitButton);
         }
+        private void StartNextGame()
+        {
+            if (gameData.Score >= gameData.MaxScore)
+            {
+                MessageBox.Show("You Win!");
+                gameData.Score = 0;
+                gameData.Mistakes = 0;
+                return;
+            }
 
+            if (gameData.Mistakes >= gameData.MaxMistakes)
+            {
+                MessageBox.Show("Game Over!");
+                gameData.Score = 0;
+                gameData.Mistakes = 0;
+                return;
+            }
+
+            if (miniGames.Count == 0)
+            {
+                MessageBox.Show("No minigames added!");
+                return;
+            }
+
+            int index = rand.Next(miniGames.Count);
+            var instance = Activator.CreateInstance(miniGames[index]) as IMiniGame;
+            if (instance != null)
+            {
+                instance.GameEnded += OnMiniGameEnded!;
+                instance.StartGame();
+            }
+            else
+            {
+                MessageBox.Show($"Could not create instance of {miniGames[index].Name}");
+            }
+        }    
         private void LoadMiniGames()
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
