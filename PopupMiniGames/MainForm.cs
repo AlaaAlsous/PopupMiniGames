@@ -1,4 +1,4 @@
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 namespace MiniGames
 {
     public partial class MainForm : Form
@@ -32,5 +32,20 @@ namespace MiniGames
             this.Controls.Add(difficultyButton);
             this.Controls.Add(exitButton);
         }
+
+        private void LoadMiniGames()
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+            foreach (var type in assembly.GetTypes())
+            {
+                if (type.IsClass && typeof(IMiniGame).IsAssignableFrom(type) && type.Namespace == "MiniGames.MiniGames")
+                {
+                    miniGames.Add(type);
+                }
+            }
+        }
+
+
     }
 }
