@@ -80,7 +80,12 @@ namespace MiniGames
                 }
             }
         }
-
+        private void OnMiniGameEnded(object sender, GameResult e)
+        {
+            gameData.Score += e.Points;
+            gameData.Mistakes += e.Mistakes;
+            StartNextGame();
+        }
 
     }
 }
