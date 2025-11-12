@@ -30,7 +30,36 @@ namespace MiniGames
         }
         private void ShowOptions()
         {
-            MessageBox.Show("Options: W.I.P");
+            Form optionsForm = new Form();
+            optionsForm.Width = 800;
+            optionsForm.Height = 600;
+            optionsForm.Text = "Options";
+            optionsForm.FormBorderStyle = FormBorderStyle.None;
+            optionsForm.StartPosition = FormStartPosition.CenterParent;
+            optionsForm.BackColor = Color.Black;
+            optionsForm.TransparencyKey = Color.Black;
+
+            string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
+            UIManager uiOption = new UIManager(optionsForm, basePath);
+            uiOption.CreateButton("EASY.png", "EASYPRESS.png", new Point(300, 100), () =>
+            {
+                gameData.SetDifficulty(Difficulty.Easy);
+                optionsForm.Close();
+            });
+
+            uiOption.CreateButton("MEDIUM.png", "MEDIUMPRESS.png", new Point(300, 200), () =>
+            {
+                gameData.SetDifficulty(Difficulty.Medium);
+                optionsForm.Close();
+            });
+
+            uiOption.CreateButton("HARD.png", "HARDPRESS.png", new Point(300, 300), () =>
+            {
+                gameData.SetDifficulty(Difficulty.Hard);
+                optionsForm.Close();
+            });
+
+            optionsForm.ShowDialog();
         }
         private void StartNextGame()
         {
