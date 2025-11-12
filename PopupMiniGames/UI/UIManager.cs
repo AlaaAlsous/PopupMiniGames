@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 
-namespace PopupMiniGames.UI
+namespace MiniGames.UI
 {
     public class UIManager
     {

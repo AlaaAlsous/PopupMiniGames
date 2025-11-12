@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MiniGames.MiniGames;
-using PopupMiniGames.UI;
+using MiniGames.UI;
 
 namespace MiniGames
 {
@@ -13,7 +13,7 @@ namespace MiniGames
         private Random rand = new Random();
         private GameData gameData = new GameData();
 
-        private UIManager uiManager; 
+        private UIManager uiManager;
 
         public MainForm()
         {
@@ -52,7 +52,7 @@ namespace MiniGames
 
             if (miniGames.Count == 0)
             {
-                MessageBox.Show("No minigames added!");
+                MessageBox.Show("No mini-games have been added yet!");
                 return;
             }
 
@@ -61,7 +61,7 @@ namespace MiniGames
             if (instance != null)
             {
                 instance.GameEnded += OnMiniGameEnded!;
-                instance.StartGame();
+                instance.StartGame(gameData.Difficulty);
             }
             else
             {
