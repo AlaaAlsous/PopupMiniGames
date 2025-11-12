@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using MiniGames.MiniGames;
+
 using MiniGames.UI;
 
 namespace MiniGames
@@ -24,7 +24,7 @@ namespace MiniGames
             //MessageBox.Show(Path.GetFullPath(basePath));
             uiManager = new UIManager(this, basePath);
             uiManager.CreateButton("PLAY.png", "PLAYPRESS.png", new Point(300, 100), StartNextGame);
-            uiManager.CreateButton("OPTIONS.png", "OPTIONSPRESS.png", new Point(300, 200), ShowOptions); // <-- WIP
+            uiManager.CreateButton("OPTIONS.png", "OPTIONSPRESS.png", new Point(300, 200), ShowOptions); 
             uiManager.CreateButton("EXIT.png", "EXITPRESS.png", new Point(300, 300), () => Application.Exit());
             LoadMiniGames();
         }
