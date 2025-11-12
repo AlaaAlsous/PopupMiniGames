@@ -20,8 +20,8 @@ namespace MiniGames
             this.Size = new Size(300, 200);
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            string basePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UIAssets")
-                            + System.IO.Path.DirectorySeparatorChar;
+            string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
+            //MessageBox.Show(Path.GetFullPath(basePath));
             uiManager = new UIManager(this, basePath);
             uiManager.CreateButton("PLAY.png", "PLAYPRESS.png", new Point(300, 100), StartNextGame);
             uiManager.CreateButton("OPTIONS.png", "OPTIONSPRESS.png", new Point(300, 200), ShowOptions); // <-- WIP
