@@ -1,4 +1,10 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+using MiniGames.MiniGames;
+using PopupMiniGames.UI;
+
 namespace MiniGames
 {
     public partial class MainForm : Form
@@ -7,30 +13,24 @@ namespace MiniGames
         private Random rand = new Random();
         private GameData gameData = new GameData();
 
+        private UIManager uiManager; 
+
         public MainForm()
         {
             this.Size = new Size(300, 200);
             this.StartPosition = FormStartPosition.CenterScreen;
-            InitializeMenu();
+
+            string basePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UIAssets")
+                            + System.IO.Path.DirectorySeparatorChar;
+            uiManager = new UIManager(this, basePath);
+            uiManager.CreateButton("PLAY.png", "PLAYPRESS.png", new Point(300, 100), StartNextGame);
+            uiManager.CreateButton("OPTIONS.png", "OPTIONSPRESS.png", new Point(300, 200), ShowOptions); // <-- WIP
+            uiManager.CreateButton("EXIT.png", "EXITPRESS.png", new Point(300, 300), () => Application.Exit());
             LoadMiniGames();
         }
-
-        private void InitializeMenu()
+        private void ShowOptions()
         {
-            Button difficultyButton = new Button();
-            difficultyButton.Text = "Play";
-            difficultyButton.Size = new Size(150, 40);
-            difficultyButton.Location = new Point(70, 20);
-            difficultyButton.Click += (s, e) => StartNextGame();
-
-            Button exitButton = new Button();
-            exitButton.Text = "Exit";
-            exitButton.Size = new Size(150, 40);
-            exitButton.Location = new Point(70, 80);
-            exitButton.Click += (s, e) => Application.Exit();
-
-            this.Controls.Add(difficultyButton);
-            this.Controls.Add(exitButton);
+            MessageBox.Show("Options: W.I.P");
         }
         private void StartNextGame()
         {
@@ -67,7 +67,7 @@ namespace MiniGames
             {
                 MessageBox.Show($"Could not create instance of {miniGames[index].Name}");
             }
-        }    
+        }
         private void LoadMiniGames()
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -86,6 +86,5 @@ namespace MiniGames
             gameData.Mistakes += e.Mistakes;
             StartNextGame();
         }
-
     }
 }
