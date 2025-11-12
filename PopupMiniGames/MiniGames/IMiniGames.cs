@@ -5,7 +5,7 @@ namespace MiniGames
     public interface IMiniGame
     {
         event EventHandler<GameResult> GameEnded;
-        void StartGame();
+        void StartGame(Difficulty difficulty);
     }
 
     public class GameResult : EventArgs
