@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -12,7 +13,7 @@ namespace MiniGames
         private List<Type> miniGames = new List<Type>();
         private Random rand = new Random();
         private GameData gameData = new GameData();
-
+        private PictureBox difficultyIcon = new PictureBox();
         private UIManager uiManager;
 
         public MainForm()
@@ -27,7 +28,31 @@ namespace MiniGames
             uiManager.CreateButton("PLAY.png", "PLAYPRESS.png", new Point(310, 100), StartNextGame);
             uiManager.CreateButton("OPTIONS.png", "OPTIONSPRESS.png", new Point(310, 200), ShowOptions);
             uiManager.CreateButton("EXIT.png", "EXITPRESS.png", new Point(310, 300), () => Application.Exit());
+            currentDifficultyIcon();
             LoadMiniGames();
+        }
+        private void currentDifficultyIcon()
+        {
+            difficultyIcon = new PictureBox
+            {
+                Location = new Point(235, 400),
+                Size = new Size(350, 150),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.Transparent
+            };
+            string img = gameData.Difficulty switch
+            {
+                Difficulty.Easy => "SL_EASY.png",
+                Difficulty.Medium => "SL_MEDIUM.png",
+                Difficulty.Hard => "SL_HARD.png",
+                _ => "SL_EASY.png"
+            };
+            string path = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets", img);
+
+            difficultyIcon.Image = Image.FromFile(path);
+
+            this.Controls.Add(difficultyIcon);
+            difficultyIcon.BringToFront();
         }
         private void ShowOptions()
         {
@@ -45,21 +70,23 @@ namespace MiniGames
             uiOption.CreateButton("EASY.png", "EASYPRESS.png", new Point(310, 100), () =>
             {
                 gameData.SetDifficulty(Difficulty.Easy);
+                currentDifficultyIcon();
                 optionsForm.Close();
             });
 
             uiOption.CreateButton("MEDIUM.png", "MEDIUMPRESS.png", new Point(310, 200), () =>
             {
                 gameData.SetDifficulty(Difficulty.Medium);
+                currentDifficultyIcon();
                 optionsForm.Close();
             });
 
             uiOption.CreateButton("HARD.png", "HARDPRESS.png", new Point(310, 300), () =>
             {
                 gameData.SetDifficulty(Difficulty.Hard);
+                currentDifficultyIcon();
                 optionsForm.Close();
             });
-
             optionsForm.ShowDialog();
         }
         private void StartNextGame()
