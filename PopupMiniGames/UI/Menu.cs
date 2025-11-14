@@ -11,12 +11,20 @@ namespace PopupMiniGames.UI
     {
         List<MenuButton> menuButtons;
         public int CurrentSelection { get; private set; }
+        Form parentForm;
         public Menu(Form parentForm)
         {
             menuButtons = new List<MenuButton>();
             CurrentSelection = -1;
+            this.parentForm = parentForm;
         }
 
+
+        public void AddMenuButton(MenuButton button)
+        {
+            menuButtons.Add(button);
+            parentForm.Controls.Add(button);
+        }
 
         public void SelectNext()
         {
