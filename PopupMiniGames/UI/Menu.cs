@@ -12,13 +12,37 @@ namespace PopupMiniGames.UI
         List<MenuButton> menuButtons;
         public int CurrentSelection { get; private set; }
         Form parentForm;
+        public Action onBack;
         public Menu(Form parentForm)
         {
             menuButtons = new List<MenuButton>();
             CurrentSelection = -1;
             this.parentForm = parentForm;
+            onBack = () => { };
         }
 
+        public void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.S)
+            {
+                SelectNext();
+            }
+            else if (e.KeyCode == Keys.W)
+            {
+                SelectPrevious();
+            }
+            else if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
+            {
+                if (menuButtons.Count > 0 && CurrentSelection >= 0)
+                {
+                    menuButtons[CurrentSelection].PerformClick();
+                }
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                onBack.Invoke();
+            }
+        }
 
         public void AddMenuButton(MenuButton button)
         {
