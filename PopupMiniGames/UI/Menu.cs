@@ -47,6 +47,14 @@ namespace PopupMiniGames.UI
         public void AddMenuButton(MenuButton button)
         {
             menuButtons.Add(button);
+            menuButtons[menuButtons.IndexOf(button)].MouseEnter += (s, e) =>
+            {
+                SetSelection(menuButtons.IndexOf(button));
+            };
+            menuButtons[menuButtons.IndexOf(button)].MouseLeave += (s, e) =>
+            {
+                Deselect(menuButtons.IndexOf(button));
+            };
             parentForm.Controls.Add(button);
         }
 
