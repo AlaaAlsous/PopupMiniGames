@@ -16,5 +16,36 @@ namespace PopupMiniGames.UI
             menuButtons = new List<MenuButton>();
             CurrentSelection = -1;
         }
+
+
+        public void SelectNext()
+        {
+            if (menuButtons.Count == 0) return;
+            CurrentSelection = Math.Min(menuButtons.Count - 1, CurrentSelection + 1);
+            UpdateButtonStates();
+        }
+        public void SelectPrevious()
+        {
+            if (menuButtons.Count == 0) return;
+            CurrentSelection = Math.Max(0, CurrentSelection - 1);
+            UpdateButtonStates();
+        }
+        private void UpdateButtonStates()
+        {
+            for (int i = 0; i < menuButtons.Count; i++)
+            {
+                if (i == CurrentSelection)
+                {
+                    menuButtons[i].SetSelectedState();
+                }
+                else
+                {
+                    menuButtons[i].SetNormalState();
+                }
+            }
+        }
+
+
+
     }
 }
