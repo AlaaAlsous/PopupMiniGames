@@ -25,7 +25,20 @@ namespace PopupMiniGames.UI
             this.Location = location;
             this.BackgroundImageLayout = ImageLayout.Stretch;
 
+            SetNormalState();
             this.Click += (s, e) => onClick();
+        }
+
+
+        public void SetSelectedState()
+        {
+            if (System.IO.File.Exists(selectedImagePath))
+                this.BackgroundImage = Image.FromFile(selectedImagePath);
+        }
+        public void SetNormalState()
+        {
+            if (System.IO.File.Exists(normalImagePath))
+                this.BackgroundImage = Image.FromFile(normalImagePath);
         }
     }
 }
