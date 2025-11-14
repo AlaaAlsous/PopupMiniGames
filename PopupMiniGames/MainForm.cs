@@ -22,6 +22,7 @@ namespace MiniGames
         {
             this.Size = new Size(300, 200);
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.KeyPreview = true;
             gameData.SetDifficulty(Difficulty.Medium);
 
             string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
@@ -72,27 +73,28 @@ namespace MiniGames
             optionsForm.TransparencyKey = Color.Black;
 
             string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
-            UIManager uiOption = new UIManager(optionsForm, basePath);
-            uiOption.CreateButton("EASY.png", "EASYPRESS.png", new Point(310, 100), () =>
+            Menu optionsMenu = new Menu(optionsForm);
+            optionsForm.KeyPreview = true;
+            optionsForm.KeyDown += optionsMenu.OnKeyDown!;
+            optionsMenu.onBack += optionsForm.Close;
+            optionsMenu.AddMenuButton(new MenuButton("EASY.png", "EASYPRESS.png", new Point(310, 100), () =>
             {
                 gameData.SetDifficulty(Difficulty.Easy);
                 currentDifficultyIcon();
                 optionsForm.Close();
-            });
-
-            uiOption.CreateButton("MEDIUM.png", "MEDIUMPRESS.png", new Point(310, 200), () =>
+            }, basePath));
+            optionsMenu.AddMenuButton(new MenuButton("MEDIUM.png", "MEDIUMPRESS.png", new Point(310, 200), () =>
             {
                 gameData.SetDifficulty(Difficulty.Medium);
                 currentDifficultyIcon();
                 optionsForm.Close();
-            });
-
-            uiOption.CreateButton("HARD.png", "HARDPRESS.png", new Point(310, 300), () =>
+            }, basePath));
+            optionsMenu.AddMenuButton(new MenuButton("HARD.png", "HARDPRESS.png", new Point(310, 300), () =>
             {
                 gameData.SetDifficulty(Difficulty.Hard);
                 currentDifficultyIcon();
                 optionsForm.Close();
-            });
+            }, basePath));
             optionsForm.ShowDialog();
         }
         private void StartNextGame()
