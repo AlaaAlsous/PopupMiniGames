@@ -71,6 +71,8 @@ namespace MiniGames
             optionsForm.StartPosition = FormStartPosition.CenterParent;
             optionsForm.BackColor = Color.Black;
             optionsForm.TransparencyKey = Color.Black;
+            optionsForm.ShowInTaskbar = false;
+            optionsForm.Owner = this;
 
             string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
             Menu optionsMenu = new Menu(optionsForm);
