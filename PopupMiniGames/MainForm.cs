@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PopupMiniGames.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,6 +17,7 @@ namespace MiniGames
         private PictureBox difficultyIcon = new PictureBox();
         private UIManager uiManager;
 
+        private Menu mainMenu;
         public MainForm()
         {
             this.Size = new Size(300, 200);
@@ -25,9 +27,13 @@ namespace MiniGames
             string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
             //MessageBox.Show(Path.GetFullPath(basePath));
             uiManager = new UIManager(this, basePath);
-            uiManager.CreateButton("PLAY.png", "PLAYPRESS.png", new Point(310, 100), StartNextGame);
-            uiManager.CreateButton("OPTIONS.png", "OPTIONSPRESS.png", new Point(310, 200), ShowOptions);
-            uiManager.CreateButton("EXIT.png", "EXITPRESS.png", new Point(310, 300), () => Application.Exit());
+            mainMenu = new Menu(this);
+            mainMenu.AddMenuButton(new MenuButton("PLAY.png", "PLAYPRESS.png", new Point(310, 100), StartNextGame, basePath));
+            mainMenu.AddMenuButton(new MenuButton("OPTIONS.png", "OPTIONSPRESS.png", new Point(310, 200), ShowOptions, basePath));
+            mainMenu.AddMenuButton(new MenuButton("EXIT.png", "EXITPRESS.png", new Point(310, 300), () => Application.Exit(), basePath));
+            this.KeyDown += mainMenu.OnKeyDown!;
+            mainMenu.onBack += Application.Exit;
+
             currentDifficultyIcon();
             LoadMiniGames();
         }

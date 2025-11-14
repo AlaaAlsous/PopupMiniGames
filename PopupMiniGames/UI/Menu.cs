@@ -20,7 +20,6 @@ namespace PopupMiniGames.UI
             this.parentForm = parentForm;
             onBack = () => { };
         }
-
         public void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.S)
@@ -43,7 +42,6 @@ namespace PopupMiniGames.UI
                 onBack.Invoke();
             }
         }
-
         public void AddMenuButton(MenuButton button)
         {
             menuButtons.Add(button);
@@ -57,7 +55,6 @@ namespace PopupMiniGames.UI
             };
             parentForm.Controls.Add(button);
         }
-
         public void SelectNext()
         {
             if (menuButtons.Count == 0) return;
@@ -98,8 +95,5 @@ namespace PopupMiniGames.UI
                 }
             }
         }
-
-
-
     }
 }
