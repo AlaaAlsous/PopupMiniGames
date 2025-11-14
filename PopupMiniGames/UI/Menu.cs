@@ -62,6 +62,20 @@ namespace PopupMiniGames.UI
             CurrentSelection = Math.Max(0, CurrentSelection - 1);
             UpdateButtonStates();
         }
+        public void SetSelection(int index)
+        {
+            if (index < 0 || index >= menuButtons.Count) return;
+            CurrentSelection = index;
+            UpdateButtonStates();
+        }
+        public void Deselect(int index)
+        {
+            if (CurrentSelection == index)
+            {
+                CurrentSelection = -1;
+            }
+            UpdateButtonStates();
+        }
         private void UpdateButtonStates()
         {
             for (int i = 0; i < menuButtons.Count; i++)
