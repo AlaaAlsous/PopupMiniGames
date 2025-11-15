@@ -24,37 +24,41 @@ namespace MiniGames.UI
             mainForm.Text = "Popup Mini Games";
             mainForm.FormBorderStyle = FormBorderStyle.None;
             mainForm.StartPosition = FormStartPosition.CenterScreen;
-
             mainForm.BackColor = Color.Black;
             mainForm.TransparencyKey = Color.Black;
 
-            string bgPath = Path.Combine(basePath, "MENU_BG.png");
-            if (File.Exists(bgPath))
+            SetBackground("MENU_BG.png");
+        }
+        public void SetBackground(string imageName)
+        {
+            string path = Path.Combine(basePath, imageName);
+            if (File.Exists(path))
             {
-                mainForm.BackgroundImage = Image.FromFile(bgPath);
+                mainForm.BackgroundImage = Image.FromFile(path);
                 mainForm.BackgroundImageLayout = ImageLayout.Zoom;
             }
         }
 
         public Button CreateButton(string normalImage, string hoverImage, Point location, Action onClick)
         {
-            Button btn = new Button();
-            btn.FlatStyle = FlatStyle.Flat;
+            Button btn = new Button
+            {
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.Transparent,
+                TabStop = false,
+                Width = 200,
+                Height = 80,
+                Location = location,
+                BackgroundImageLayout = ImageLayout.Stretch
+            };
             btn.FlatAppearance.BorderSize = 0;
             btn.FlatAppearance.MouseDownBackColor = Color.Transparent;
             btn.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            btn.BackColor = Color.Transparent;
-            btn.TabStop = false;
-            btn.Width = 200;
-            btn.Height = 80;
-            btn.Location = location;
 
             string normalPath = Path.Combine(basePath, normalImage);
             string hoverPath = Path.Combine(basePath, hoverImage);
 
-            if (File.Exists(normalPath))
-                btn.BackgroundImage = Image.FromFile(normalPath);
-            btn.BackgroundImageLayout = ImageLayout.Stretch;
+            btn.BackgroundImage = LoadImage(normalPath);
 
             btn.MouseEnter += (s, e) =>
             {
@@ -71,7 +75,13 @@ namespace MiniGames.UI
             btn.Click += (s, e) => onClick?.Invoke();
 
             mainForm.Controls.Add(btn);
-            return btn;
+            return btn;   
+        }
+        private Image LoadImage(string path, string fallbackPath = "")
+        {
+            if (File.Exists(path))
+                return Image.FromFile(path);
+            return null!;
         }
     }
 }

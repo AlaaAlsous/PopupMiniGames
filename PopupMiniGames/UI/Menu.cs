@@ -6,17 +6,26 @@ namespace PopupMiniGames.UI
 {
     internal class Menu
     {
-        private List<MenuButton> menuButtons;
-        public int CurrentSelection { get; private set; }
-        private Form parentForm;
-        public Action onBack;
+        private readonly List<MenuButton> menuButtons = new ();
+        public int CurrentSelection { get; private set; } = 0;
+        private readonly Form parentForm;
+        public Action onBack = () => { };
 
-        public Menu(Form parentForm)
+        public Menu(Form parentForm) => this.parentForm = parentForm;
+
+        public void AddMenuButton(MenuButton button)
         {
-            menuButtons = new List<MenuButton>();
-            CurrentSelection = 0;
-            this.parentForm = parentForm;
-            onBack = () => { };
+            menuButtons.Add(button);
+            parentForm.Controls.Add(button);
+
+            if (menuButtons.Count == 1)
+                UpdateButtonStates();
+
+            button.MouseEnter += (s, e) =>
+            {
+                CurrentSelection = menuButtons.IndexOf(button);
+                UpdateButtonStates();
+            };
         }
 
         public void OnKeyDown(object sender, KeyEventArgs e)
@@ -28,42 +37,24 @@ namespace PopupMiniGames.UI
                 case Keys.S:
                 case Keys.Down:
                     CurrentSelection = (CurrentSelection + 1) % menuButtons.Count;
-                    UpdateButtonStates();
+                    UpdateButtonStates(); // <?
                     break;
 
                 case Keys.W:
                 case Keys.Up:
                     CurrentSelection = (CurrentSelection - 1 + menuButtons.Count) % menuButtons.Count;
-                    UpdateButtonStates();
+                    UpdateButtonStates(); //<?
                     break;
 
                 case Keys.Enter:
                 case Keys.Space:
-                    if (CurrentSelection >= 0 && CurrentSelection < menuButtons.Count)
-                        menuButtons[CurrentSelection].PerformClick();
+                    menuButtons[CurrentSelection].PerformClick();
                     break;
 
                 case Keys.Escape:
                     onBack.Invoke();
                     break;
             }
-        }
-
-        public void AddMenuButton(MenuButton button)
-        {
-            menuButtons.Add(button);
-            parentForm.Controls.Add(button);
-
-            if (menuButtons.Count == 1)
-            {
-                CurrentSelection = 0;
-                UpdateButtonStates();
-            }
-            button.MouseEnter += (s, e) =>
-            {
-                CurrentSelection = menuButtons.IndexOf(button);
-                UpdateButtonStates();
-            };
         }
 
         private void UpdateButtonStates()
@@ -76,5 +67,7 @@ namespace PopupMiniGames.UI
                     menuButtons[i].SetNormalState();
             }
         }
+        public void ShowMenu() => menuButtons.ForEach(b => b.Visible = true);
+        public void HideMenu() => menuButtons.ForEach(b => b.Visible = false);
     }
 }

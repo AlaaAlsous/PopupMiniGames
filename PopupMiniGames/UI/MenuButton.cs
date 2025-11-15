@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PopupMiniGames.UI
 {
@@ -14,21 +14,24 @@ namespace PopupMiniGames.UI
         {
             selectedImagePath = Path.Combine(basePath, selectedImage);
             normalImagePath = Path.Combine(basePath, normalImage);
-            this.FlatStyle = FlatStyle.Flat;
-            this.FlatAppearance.BorderSize = 0;
-            this.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            this.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            this.BackColor = Color.Transparent;
-            this.TabStop = false;
-            this.Width = 200;
-            this.Height = 80;
-            this.Location = location;
-            this.BackgroundImageLayout = ImageLayout.Stretch;
+
+            normalImagePath = Path.Combine(basePath, normalImage);
+            selectedImagePath = Path.Combine(basePath, selectedImage);
+
+            FlatStyle = FlatStyle.Flat;
+            FlatAppearance.BorderSize = 0;
+            FlatAppearance.MouseDownBackColor = Color.Transparent;
+            FlatAppearance.MouseOverBackColor = Color.Transparent;
+            BackColor = Color.Transparent;
+            TabStop = false;
+            Width = 200;
+            Height = 80;
+            Location = location;
+            BackgroundImageLayout = ImageLayout.Stretch;
 
             SetNormalState();
-            this.Click += (s, e) => onClick();
+            Click += (s, e) => onClick?.Invoke();
         }
-
 
         public void SetSelectedState()
         {
