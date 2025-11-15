@@ -1,98 +1,79 @@
-﻿using MiniGames;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PopupMiniGames.UI
 {
     internal class Menu
     {
-        List<MenuButton> menuButtons;
+        private List<MenuButton> menuButtons;
         public int CurrentSelection { get; private set; }
-        Form parentForm;
+        private Form parentForm;
         public Action onBack;
+
         public Menu(Form parentForm)
         {
             menuButtons = new List<MenuButton>();
-            CurrentSelection = -1;
+            CurrentSelection = 0;
             this.parentForm = parentForm;
             onBack = () => { };
         }
+
         public void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.S)
+            if (menuButtons.Count == 0) return;
+
+            switch (e.KeyCode)
             {
-                SelectNext();
-            }
-            else if (e.KeyCode == Keys.W)
-            {
-                SelectPrevious();
-            }
-            else if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
-            {
-                if (menuButtons.Count > 0 && CurrentSelection >= 0)
-                {
-                    menuButtons[CurrentSelection].PerformClick();
-                }
-            }
-            else if (e.KeyCode == Keys.Escape)
-            {
-                onBack.Invoke();
+                case Keys.S:
+                case Keys.Down:
+                    CurrentSelection = (CurrentSelection + 1) % menuButtons.Count;
+                    UpdateButtonStates();
+                    break;
+
+                case Keys.W:
+                case Keys.Up:
+                    CurrentSelection = (CurrentSelection - 1 + menuButtons.Count) % menuButtons.Count;
+                    UpdateButtonStates();
+                    break;
+
+                case Keys.Enter:
+                case Keys.Space:
+                    if (CurrentSelection >= 0 && CurrentSelection < menuButtons.Count)
+                        menuButtons[CurrentSelection].PerformClick();
+                    break;
+
+                case Keys.Escape:
+                    onBack.Invoke();
+                    break;
             }
         }
+
         public void AddMenuButton(MenuButton button)
         {
             menuButtons.Add(button);
-            menuButtons[menuButtons.IndexOf(button)].MouseEnter += (s, e) =>
-            {
-                SetSelection(menuButtons.IndexOf(button));
-            };
-            menuButtons[menuButtons.IndexOf(button)].MouseLeave += (s, e) =>
-            {
-                Deselect(menuButtons.IndexOf(button));
-            };
             parentForm.Controls.Add(button);
-        }
-        public void SelectNext()
-        {
-            if (menuButtons.Count == 0) return;
-            CurrentSelection = Math.Min(menuButtons.Count - 1, CurrentSelection + 1);
-            UpdateButtonStates();
-        }
-        public void SelectPrevious()
-        {
-            if (menuButtons.Count == 0) return;
-            CurrentSelection = Math.Max(0, CurrentSelection - 1);
-            UpdateButtonStates();
-        }
-        public void SetSelection(int index)
-        {
-            if (index < 0 || index >= menuButtons.Count) return;
-            CurrentSelection = index;
-            UpdateButtonStates();
-        }
-        public void Deselect(int index)
-        {
-            if (CurrentSelection == index)
+
+            if (menuButtons.Count == 1)
             {
-                CurrentSelection = -1;
+                CurrentSelection = 0;
+                UpdateButtonStates();
             }
-            UpdateButtonStates();
+            button.MouseEnter += (s, e) =>
+            {
+                CurrentSelection = menuButtons.IndexOf(button);
+                UpdateButtonStates();
+            };
         }
+
         private void UpdateButtonStates()
         {
             for (int i = 0; i < menuButtons.Count; i++)
             {
                 if (i == CurrentSelection)
-                {
                     menuButtons[i].SetSelectedState();
-                }
                 else
-                {
                     menuButtons[i].SetNormalState();
-                }
             }
         }
     }
