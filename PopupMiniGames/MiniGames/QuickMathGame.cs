@@ -39,6 +39,8 @@ namespace MiniGames.MiniGames
                 }
             };
             timer.Interval = 1000;
+            timer.Tick += TimerTick!;
+            buttonCheck.Click += ButtonCheckClick!;
             this.Controls.Add(labelQuestion);
             this.Controls.Add(labelTime);
             this.Controls.Add(labelScore);
@@ -55,7 +57,6 @@ namespace MiniGames.MiniGames
             wrongAnswer = 0;
             labelScore.Text = "Points: 0";
             labelWrong.Text = "Wrong Answers: 0";
-
             MessageBox.Show(
                 $"Welcome to Quick Math Game!\n\n" +
                 $"• Difficulty: {difficulty}\n" +
@@ -70,6 +71,7 @@ namespace MiniGames.MiniGames
             StartNewQuestion(difficulty);
             this.ShowDialog();
         }
+
         private void StartNewQuestion(Difficulty difficulty)
         {
             timer.Stop();
@@ -92,7 +94,6 @@ namespace MiniGames.MiniGames
                     num2 = rnd.Next(1, 10);
                     break;
             }
-
             char[] operators;
             if (difficulty == Difficulty.Easy)
                 operators = new char[] { '+', '-' };
@@ -100,9 +101,7 @@ namespace MiniGames.MiniGames
                 operators = new char[] { '+', '-', 'x' };
             else
                 operators = new char[] { '+', '-', 'x', '/' };
-
             char op = operators[rnd.Next(operators.Length)];
-
             if (op == '-')
             {
                 if (num1 < num2)
@@ -112,12 +111,10 @@ namespace MiniGames.MiniGames
                     num2 = temp;
                 }
             }
-
             if (op == '/')
             {
                 num1 = num1 * num2;
             }
-
             switch (op)
             {
                 case '+': answer = num1 + num2; break;
@@ -132,6 +129,7 @@ namespace MiniGames.MiniGames
             textBoxAnswer.Focus();
             timer.Start();
         }
+
         private void TimerTick(object sender, EventArgs e)
         {
             timeLeft--;
@@ -143,10 +141,9 @@ namespace MiniGames.MiniGames
                 labelWrong.Text = $"Wrong Answers: {wrongAnswer}";
                 timer.Stop();
                 MessageBox.Show($"Time is up! The correct answer was: {answer}");
-
                 if (wrongAnswer >= 5)
                 {
-                    GameOver(true);
+                    GameOver(false);
                 }
                 else
                 {
@@ -154,6 +151,7 @@ namespace MiniGames.MiniGames
                 }
             }
         }
+
         private void ButtonCheckClick(object sender, EventArgs e)
         {
             if (!int.TryParse(textBoxAnswer.Text, out int userAnswer))
@@ -161,9 +159,7 @@ namespace MiniGames.MiniGames
                 MessageBox.Show("Please enter a valid number.");
                 return;
             }
-
             timer.Stop();
-
             if (userAnswer == answer)
             {
                 score++;
@@ -174,10 +170,8 @@ namespace MiniGames.MiniGames
                 wrongAnswer++;
                 MessageBox.Show($"Wrong! The correct answer was {answer}");
             }
-
             labelScore.Text = $"Points: {score}";
             labelWrong.Text = $"Wrong Answers: {wrongAnswer}";
-
             if (score >= 10)
             {
                 GameOver(true);
@@ -191,6 +185,7 @@ namespace MiniGames.MiniGames
                 StartNewQuestion(currentDifficulty);
             }
         }
+
         private void GameOver(bool won)
         {
             timer.Stop();
@@ -206,7 +201,21 @@ namespace MiniGames.MiniGames
 
         public void Cleanup()
         {
-
+            if (timer != null)
+            {
+                timer.Stop();
+                timer.Tick -= TimerTick!;
+            }
+            if (buttonCheck != null)
+                buttonCheck.Click -= ButtonCheckClick!;
+            foreach (Control c in this.Controls)
+            {
+                c.Dispose();
+            }
+            this.Controls.Clear();
+            this.Hide();
+            this.Close();
+            this.Dispose();
         }
     }
 }
