@@ -51,7 +51,23 @@ namespace MiniGames.MiniGames
 
         public void StartGame(Difficulty difficulty)
         {
+            score = 0;
+            wrongAnswer = 0;
+            labelScore.Text = "Points: 0";
+            labelWrong.Text = "Wrong Answers: 0";
 
+            MessageBox.Show(
+                $"Welcome to Quick Math Game!\n\n" +
+                $"• Difficulty: {difficulty}\n" +
+                $"• Time per question: {(difficulty == Difficulty.Easy ? 15 : difficulty == Difficulty.Medium ? 12 : 10)} seconds\n\n" +
+                $"You will receive math questions about {(difficulty == Difficulty.Easy ? " + och -" : difficulty == Difficulty.Medium ? "+ , - och *" : "+ , - , * och /")}\n" +
+                $"Your task is to solve as many as possible before the time runs out.\n\n" +
+                $"Good luck!",
+                "Game Instructions",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+            this.ShowDialog();
         }
 
         public void Cleanup()
