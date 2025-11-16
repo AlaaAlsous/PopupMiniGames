@@ -7,6 +7,7 @@ namespace MiniGames
     public partial class MainForm : Form
     {
         private List<Type> miniGames = new List<Type>();
+        private List<Type> remainingGames = new List<Type>();
         private Random rand = new Random();
         private GameData gameData = new GameData();
 
@@ -162,9 +163,14 @@ namespace MiniGames
                 SetupMenu();
                 return;
             }
-
-            int index = rand.Next(miniGames.Count);
-            var instance = Activator.CreateInstance(miniGames[index]) as IMiniGame;
+            if (remainingGames.Count == 0)
+            {
+                remainingGames = new List<Type>(miniGames);
+            }
+            int index = rand.Next(remainingGames.Count);
+            var selectedGame = remainingGames[index];
+            remainingGames.RemoveAt(index);
+            var instance = Activator.CreateInstance(selectedGame) as IMiniGame;
             if (instance != null)
             {
                 instance.GameEnded += OnMiniGameEnded!;
@@ -172,7 +178,7 @@ namespace MiniGames
             }
             else
             {
-                MessageBox.Show($"Could not create instance of {miniGames[index].Name}");
+                MessageBox.Show($"Could not create instance of {selectedGame.Name}");
                 SetupMenu();
             }
         }
@@ -186,6 +192,7 @@ namespace MiniGames
                     miniGames.Add(type);
                 }
             }
+            remainingGames = new List<Type>(miniGames);
         }
         private void OnMiniGameEnded(object sender, GameResult e)
         {
