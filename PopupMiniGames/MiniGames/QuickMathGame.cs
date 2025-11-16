@@ -154,6 +154,43 @@ namespace MiniGames.MiniGames
                 }
             }
         }
+        private void ButtonCheckClick(object sender, EventArgs e)
+        {
+            if (!int.TryParse(textBoxAnswer.Text, out int userAnswer))
+            {
+                MessageBox.Show("Please enter a valid number.");
+                return;
+            }
+
+            timer.Stop();
+
+            if (userAnswer == answer)
+            {
+                score++;
+                MessageBox.Show("Right answer!");
+            }
+            else
+            {
+                wrongAnswer++;
+                MessageBox.Show($"Wrong! The correct answer was {answer}");
+            }
+
+            labelScore.Text = $"Points: {score}";
+            labelWrong.Text = $"Wrong Answers: {wrongAnswer}";
+
+            if (score >= 10)
+            {
+                GameOver(true);
+            }
+            else if (wrongAnswer >= 5)
+            {
+                GameOver(false);
+            }
+            else
+            {
+                StartNewQuestion(currentDifficulty);
+            }
+        }
         private void GameOver(bool won)
         {
             timer.Stop();
