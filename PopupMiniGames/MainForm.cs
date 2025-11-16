@@ -199,6 +199,9 @@ namespace MiniGames
         {
             gameData.Score += e.Points;
             gameData.Mistakes += e.Mistakes;
+
+            SetupMenu(); // <--
+
             StartNextGame();
         }
     }
