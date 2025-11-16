@@ -132,6 +132,28 @@ namespace MiniGames.MiniGames
             textBoxAnswer.Focus();
             timer.Start();
         }
+        private void TimerTick(object sender, EventArgs e)
+        {
+            timeLeft--;
+            labelTime.Text = $"Time: {timeLeft}";
+
+            if (timeLeft <= 0)
+            {
+                wrongAnswer++;
+                labelWrong.Text = $"Wrong Answers: {wrongAnswer}";
+                timer.Stop();
+                MessageBox.Show($"Time is up! The correct answer was: {answer}");
+
+                if (wrongAnswer >= 5)
+                {
+
+                }
+                else
+                {
+                    StartNewQuestion(currentDifficulty);
+                }
+            }
+        }
 
         public void Cleanup()
         {
