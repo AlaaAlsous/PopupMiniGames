@@ -67,6 +67,7 @@ namespace MiniGames.MiniGames
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information
             );
+            StartNewQuestion(difficulty);
             this.ShowDialog();
         }
         private void StartNewQuestion(Difficulty difficulty)
@@ -91,7 +92,41 @@ namespace MiniGames.MiniGames
                     num2 = rnd.Next(1, 10);
                     break;
             }
+
+            char[] operators;
+            if (difficulty == Difficulty.Easy)
+                operators = new char[] { '+', '-' };
+            else if (difficulty == Difficulty.Medium)
+                operators = new char[] { '+', '-', 'x' };
+            else
+                operators = new char[] { '+', '-', 'x', '/' };
+
+            char op = operators[rnd.Next(operators.Length)];
+
+            if (op == '-')
+            {
+                if (num1 < num2)
+                {
+                    int temp = num1;
+                    num1 = num2;
+                    num2 = temp;
+                }
+            }
+
+            if (op == '/')
+            {
+                num1 = num1 * num2;
+            }
+
+            switch (op)
+            {
+                case '+': answer = num1 + num2; break;
+                case '-': answer = num1 - num2; break;
+                case 'x': answer = num1 * num2; break;
+                case '/': answer = num1 / num2; break;
+            }
             currentDifficultyLabel.Text = $"Difficulty: {currentDifficulty}";
+            labelQuestion.Text = $"{num1} {op} {num2} = ?";
             labelTime.Text = $"Time: {timeLeft}";
             textBoxAnswer.Text = "";
             textBoxAnswer.Focus();
