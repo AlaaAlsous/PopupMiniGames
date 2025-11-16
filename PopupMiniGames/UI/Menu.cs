@@ -10,6 +10,7 @@ namespace PopupMiniGames.UI
         public int CurrentSelection { get; private set; } = 0;
         private readonly Form parentForm;
         public Action onBack = () => { };
+        public List<MenuButton> Buttons => menuButtons;
 
         public Menu(Form parentForm) => this.parentForm = parentForm;
 

@@ -1,6 +1,5 @@
 ﻿using PopupMiniGames.UI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -14,20 +13,32 @@ namespace MiniGames
         private List<Type> miniGames = new List<Type>();
         private Random rand = new Random();
         private GameData gameData = new GameData();
-        private PictureBox difficultyIcon = new PictureBox();
-        private UIManager uiManager;
 
+        private PictureBox difficultyIcon;
+        private UIManager uiManager;
         private Menu mainMenu;
+
         public MainForm()
         {
-            this.Size = new Size(300, 200);
+            this.Size = new Size(800, 600);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.KeyPreview = true;
             gameData.SetDifficulty(Difficulty.Medium);
 
             string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
-            //MessageBox.Show(Path.GetFullPath(basePath));
             uiManager = new UIManager(this, basePath);
+
+            SetupMenu();
+            LoadMiniGames();
+        }
+
+        private void SetupMenu()
+        {
+            // Bakgrund
+            uiManager.SetBackground("MENU_BG.png");
+
+            // Knappar
+            string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
             mainMenu = new Menu(this);
             mainMenu.AddMenuButton(new MenuButton("PLAY.png", "PLAYPRESS.png", new Point(310, 100), StartNextGame, basePath));
             mainMenu.AddMenuButton(new MenuButton("OPTIONS.png", "OPTIONSPRESS.png", new Point(310, 200), ShowOptions, basePath));
@@ -36,10 +47,16 @@ namespace MiniGames
             mainMenu.onBack += Application.Exit;
 
             currentDifficultyIcon();
-            LoadMiniGames();
         }
+
         private void currentDifficultyIcon()
         {
+            if (difficultyIcon != null)
+            {
+                this.Controls.Remove(difficultyIcon);
+                difficultyIcon.Dispose();
+            }
+
             difficultyIcon = new PictureBox
             {
                 Location = new Point(235, 400),
@@ -47,6 +64,7 @@ namespace MiniGames
                 SizeMode = PictureBoxSizeMode.Zoom,
                 BackColor = Color.Transparent
             };
+
             string img = gameData.Difficulty switch
             {
                 Difficulty.Easy => "SL_EASY.png",
@@ -54,31 +72,35 @@ namespace MiniGames
                 Difficulty.Hard => "SL_HARD.png",
                 _ => "SL_EASY.png"
             };
-            string path = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets", img);
 
+            string path = System.IO.Path.Combine(Application.StartupPath, @"..\..\..\UIAssets", img);
             difficultyIcon.Image = Image.FromFile(path);
 
             this.Controls.Add(difficultyIcon);
             difficultyIcon.BringToFront();
         }
+
         private void ShowOptions()
         {
-            Form optionsForm = new Form();
-            optionsForm.Width = 800;
-            optionsForm.Height = 600;
-            optionsForm.Text = "Options";
-            optionsForm.FormBorderStyle = FormBorderStyle.None;
-            optionsForm.StartPosition = FormStartPosition.CenterParent;
-            optionsForm.BackColor = Color.Black;
-            optionsForm.TransparencyKey = Color.Black;
-            optionsForm.ShowInTaskbar = false;
-            optionsForm.Owner = this;
+            Form optionsForm = new Form
+            {
+                Width = 800,
+                Height = 600,
+                Text = "Options",
+                FormBorderStyle = FormBorderStyle.None,
+                StartPosition = FormStartPosition.CenterParent,
+                BackColor = Color.Black,
+                TransparencyKey = Color.Black,
+                ShowInTaskbar = false,
+                Owner = this
+            };
 
-            string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
+            string basePath = System.IO.Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
             Menu optionsMenu = new Menu(optionsForm);
             optionsForm.KeyPreview = true;
             optionsForm.KeyDown += optionsMenu.OnKeyDown!;
             optionsMenu.onBack += optionsForm.Close;
+
             optionsMenu.AddMenuButton(new MenuButton("EASY.png", "EASYPRESS.png", new Point(310, 100), () =>
             {
                 gameData.SetDifficulty(Difficulty.Easy);
@@ -97,15 +119,39 @@ namespace MiniGames
                 currentDifficultyIcon();
                 optionsForm.Close();
             }, basePath));
+
             optionsForm.ShowDialog();
         }
+
         private void StartNextGame()
         {
+            // “Kill” menyn helt
+            if (mainMenu != null)
+            {
+                foreach (var btn in mainMenu.Buttons)
+                {
+                    this.Controls.Remove(btn);
+                    btn.Dispose();
+                }
+                mainMenu = null;
+            }
+
+            if (difficultyIcon != null)
+            {
+                this.Controls.Remove(difficultyIcon);
+                difficultyIcon.Dispose();
+                difficultyIcon = null;
+            }
+
+            this.BackgroundImage = null;
+
+            // Kontrollera game-over / win
             if (gameData.Score >= gameData.MaxScore)
             {
                 MessageBox.Show("You Win!");
                 gameData.Score = 0;
                 gameData.Mistakes = 0;
+                SetupMenu();
                 return;
             }
 
@@ -114,12 +160,14 @@ namespace MiniGames
                 MessageBox.Show("Game Over!");
                 gameData.Score = 0;
                 gameData.Mistakes = 0;
+                SetupMenu();
                 return;
             }
 
             if (miniGames.Count == 0)
             {
                 MessageBox.Show("No mini-games have been added yet!");
+                SetupMenu();
                 return;
             }
 
@@ -133,12 +181,12 @@ namespace MiniGames
             else
             {
                 MessageBox.Show($"Could not create instance of {miniGames[index].Name}");
+                SetupMenu();
             }
         }
         private void LoadMiniGames()
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-
             foreach (var type in assembly.GetTypes())
             {
                 if (type.IsClass && typeof(IMiniGame).IsAssignableFrom(type) && type.Namespace == "MiniGames.MiniGames")
