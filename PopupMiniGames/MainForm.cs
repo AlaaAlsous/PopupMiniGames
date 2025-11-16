@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using MiniGames.MiniGames;
 using MiniGames.UI;
 
+
 namespace MiniGames
 {
     public partial class MainForm : Form
@@ -197,9 +198,14 @@ namespace MiniGames
         }
         private void OnMiniGameEnded(object sender, GameResult e)
         {
+            if (sender is IMiniGameWithCleanup game)
+            {
+                game.Cleanup();
+            }
             gameData.Score += e.Points;
             gameData.Mistakes += e.Mistakes;
 
+            this.BackgroundImage = null;
             SetupMenu(); // <--
 
             StartNextGame();
