@@ -1,11 +1,6 @@
 ﻿using PopupMiniGames.UI;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
 using MiniGames.MiniGames;
 using MiniGames.UI;
-
 
 namespace MiniGames
 {
@@ -15,9 +10,9 @@ namespace MiniGames
         private Random rand = new Random();
         private GameData gameData = new GameData();
 
-        private PictureBox difficultyIcon;
+        private PictureBox? difficultyIcon;
         private UIManager uiManager;
-        private Menu mainMenu;
+        private Menu? mainMenu;
 
         public MainForm()
         {
@@ -35,10 +30,8 @@ namespace MiniGames
 
         private void SetupMenu()
         {
-            // Bakgrund
             uiManager.SetBackground("MENU_BG.png");
 
-            // Knappar
             string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
             mainMenu = new Menu(this);
             mainMenu.AddMenuButton(new MenuButton("PLAY.png", "PLAYPRESS.png", new Point(310, 100), StartNextGame, basePath));
@@ -126,7 +119,6 @@ namespace MiniGames
 
         private void StartNextGame()
         {
-            // “Kill” menyn helt
             if (mainMenu != null)
             {
                 foreach (var btn in mainMenu.Buttons)
@@ -146,10 +138,9 @@ namespace MiniGames
 
             this.BackgroundImage = null;
 
-            // Kontrollera game-over / win
             if (gameData.Score >= gameData.MaxScore)
             {
-                MessageBox.Show("You Win!");
+                MessageBox.Show("You Won Popup Mini Gemes!");
                 gameData.Score = 0;
                 gameData.Mistakes = 0;
                 SetupMenu();
@@ -158,7 +149,7 @@ namespace MiniGames
 
             if (gameData.Mistakes >= gameData.MaxMistakes)
             {
-                MessageBox.Show("Game Over!");
+                MessageBox.Show("Game Over! You lost Popup Mini Gemes!");
                 gameData.Score = 0;
                 gameData.Mistakes = 0;
                 SetupMenu();
@@ -206,7 +197,7 @@ namespace MiniGames
             gameData.Mistakes += e.Mistakes;
 
             this.BackgroundImage = null;
-            SetupMenu(); // <--
+            SetupMenu();
 
             StartNextGame();
         }
