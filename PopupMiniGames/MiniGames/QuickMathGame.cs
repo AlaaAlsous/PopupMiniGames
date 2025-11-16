@@ -39,6 +39,14 @@ namespace MiniGames.MiniGames
                 }
             };
             timer.Interval = 1000;
+            this.Controls.Add(labelQuestion);
+            this.Controls.Add(labelTime);
+            this.Controls.Add(labelScore);
+            this.Controls.Add(labelWrong);
+            this.Controls.Add(textBoxAnswer);
+            this.Controls.Add(buttonCheck);
+            this.Controls.Add(currentDifficultyLabel);
+            this.FormClosed += (s, e) => timer.Stop();
         }
 
         public void StartGame(Difficulty difficulty)
