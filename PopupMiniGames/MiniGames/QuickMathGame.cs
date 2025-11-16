@@ -146,13 +146,25 @@ namespace MiniGames.MiniGames
 
                 if (wrongAnswer >= 5)
                 {
-
+                    GameOver(true);
                 }
                 else
                 {
                     StartNewQuestion(currentDifficulty);
                 }
             }
+        }
+        private void GameOver(bool won)
+        {
+            timer.Stop();
+            MessageBox.Show(won ? "Congratulations! You won Quick Math Game!" : "Game over! You lost Quick Math Game!");
+            GameEnded?.Invoke(this, new GameResult
+            {
+                Points = score,
+                Mistakes = wrongAnswer,
+                Won = won
+            });
+            this.Close();
         }
 
         public void Cleanup()
