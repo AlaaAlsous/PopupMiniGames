@@ -69,6 +69,34 @@ namespace MiniGames.MiniGames
             );
             this.ShowDialog();
         }
+        private void StartNewQuestion(Difficulty difficulty)
+        {
+            timer.Stop();
+            currentDifficulty = difficulty;
+            switch (difficulty)
+            {
+                case Difficulty.Easy:
+                    timeLeft = 15;
+                    num1 = rnd.Next(1, 10);
+                    num2 = rnd.Next(1, 10);
+                    break;
+                case Difficulty.Medium:
+                    timeLeft = 12;
+                    num1 = rnd.Next(1, 10);
+                    num2 = rnd.Next(1, 10);
+                    break;
+                case Difficulty.Hard:
+                    timeLeft = 10;
+                    num1 = rnd.Next(1, 10);
+                    num2 = rnd.Next(1, 10);
+                    break;
+            }
+            currentDifficultyLabel.Text = $"Difficulty: {currentDifficulty}";
+            labelTime.Text = $"Time: {timeLeft}";
+            textBoxAnswer.Text = "";
+            textBoxAnswer.Focus();
+            timer.Start();
+        }
 
         public void Cleanup()
         {
