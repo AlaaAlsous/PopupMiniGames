@@ -153,6 +153,46 @@ namespace MiniGames.MiniGames
             };
             timer.Start();
         }
+        private void EndGame(bool won)
+        {
+            GameEnded?.Invoke(this, new GameResult
+            {
+                Won = won,
+                Points = won ? 5 : 0,
+                Mistakes = won ? 0 : 4
+            });
+
+            foreach (var c in cups)
+                parentContainer.Controls.Remove(c);
+            cups.Clear();
+        }
+
+        public void Cleanup()
+        {
+            foreach (var c in cups)
+            {
+                if (c != null)
+                {
+                    parentContainer.Controls.Remove(c);
+                    c.Dispose();
+                }
+            }
+            cups.Clear();
+
+            if (instructionLabel != null)
+            {
+                parentContainer.Controls.Remove(instructionLabel);
+                instructionLabel.Dispose();
+                instructionLabel = null;
+            }
+
+            var resultBox = parentContainer.Controls["ResultBox"];
+            if (resultBox != null)
+            {
+                parentContainer.Controls.Remove(resultBox);
+                resultBox.Dispose();
+            }
+        }
 
     }
 }
