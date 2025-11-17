@@ -10,7 +10,7 @@ namespace MiniGames.MiniGames
     {
         public event EventHandler<GameResult>? GameEnded;
 
-        private PictureBox background;
+        private PictureBox? background;
         private Random rand = new Random();
         private List<PictureBox> cups = new List<PictureBox>();
         private int correctIndex = 0;
@@ -20,6 +20,7 @@ namespace MiniGames.MiniGames
         private int wrongGuesses = 0;
         private Difficulty currentDifficulty;
         private PictureBox titleImage = null!;
+        private bool inputLocked = false;
         private string assetsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\GameAssets");
 
         public void StartGame(Difficulty difficulty)
@@ -101,6 +102,9 @@ namespace MiniGames.MiniGames
         }
         private void OnCupSelected(int selectedIndex)
         {
+            if (inputLocked) return;
+            inputLocked = true;
+
             var cup = cups[selectedIndex];
             bool won = selectedIndex == correctIndex;
 
@@ -149,6 +153,8 @@ namespace MiniGames.MiniGames
                     EndGame(false);
                     return;
                 }
+                inputLocked = false;
+
                 SetupGameUI(currentDifficulty);
             };
             timer.Start();
@@ -193,6 +199,5 @@ namespace MiniGames.MiniGames
                 resultBox.Dispose();
             }
         }
-
     }
 }
