@@ -153,5 +153,15 @@ namespace MiniGames.MiniGames
             });
             this.Close();
         }
+        public void Cleanup()
+        {
+            buttonGuess.Click -= ButtonGuessClick!;
+            foreach (Control c in this.Controls)
+                c.Dispose();
+            this.Controls.Clear();
+            this.Hide();
+            this.Close();
+            this.Dispose();
+        }
     }
 }
