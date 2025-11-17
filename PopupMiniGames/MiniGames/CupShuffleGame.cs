@@ -21,5 +21,15 @@ namespace MiniGames.MiniGames
         private Difficulty currentDifficulty;
         private PictureBox titleImage = null!;
         private string assetsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\GameAssets");
+        
+        public void StartGame(Difficulty difficulty)
+        {
+            currentDifficulty = difficulty;
+            if (parentContainer == null)
+                parentContainer = Application.OpenForms[0];
+
+            SetupGameUI(difficulty);
+        }
+
     }
 }
