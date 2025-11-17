@@ -16,16 +16,16 @@
             switch (difficulty)
             {
                 case Difficulty.Easy:
-                    MaxScore = 15;
-                    MaxMistakes = 10;
+                    MaxScore = 50;
+                    MaxMistakes = 25;
                     break;
                 case Difficulty.Medium:
-                    MaxScore = 25;
-                    MaxMistakes = 7;
+                    MaxScore = 75;
+                    MaxMistakes = 35;
                     break;
                 case Difficulty.Hard:
-                    MaxScore = 35;
-                    MaxMistakes = 5;
+                    MaxScore = 100;
+                    MaxMistakes = 50;
                     break;
             }
         }
