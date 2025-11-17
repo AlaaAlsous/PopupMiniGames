@@ -93,6 +93,7 @@ namespace MiniGames.MiniGames
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information
             );
+            StartNewRound(difficulty);
             this.ShowDialog();
         }
         private void StartNewRound(Difficulty difficulty)
@@ -108,6 +109,16 @@ namespace MiniGames.MiniGames
             labelAttempts.Text = $"Attempts: {attemptsLeft}";
             textBoxGuess.Text = "";
             textBoxGuess.Focus();
+        }
+        private void GameOver(bool won)
+        {
+            GameEnded?.Invoke(this, new GameResult
+            {
+                Points = won ? 10 : 0,
+                Mistakes = won ? 0 : 5,
+                Won = won
+            });
+            this.Close();
         }
     }
 }
