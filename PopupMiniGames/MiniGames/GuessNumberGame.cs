@@ -68,6 +68,7 @@ namespace MiniGames.MiniGames
                 Text = "Guess",
                 Font = new Font("Arial", 18)
             };
+            buttonGuess.Click += ButtonGuessClick!;
             textBoxGuess.KeyDown += (s, e) =>
             {
                 if (e.KeyCode == Keys.Enter)
@@ -107,6 +108,38 @@ namespace MiniGames.MiniGames
                 _ => 10
             };
             labelAttempts.Text = $"Attempts: {attemptsLeft}";
+            textBoxGuess.Text = "";
+            textBoxGuess.Focus();
+        }
+        private void ButtonGuessClick(object sender, EventArgs e)
+        {
+            if (!int.TryParse(textBoxGuess.Text, out int guess))
+            {
+                MessageBox.Show("Please enter a valid number.");
+                return;
+            }
+            attemptsLeft--;
+            labelAttempts.Text = $"Attempts: {attemptsLeft}";
+            if (guess == secretNumber)
+            {
+                MessageBox.Show("Correct!\nCongratulations! You won Guess The Number Game!");
+                GameOver(true);
+                return;
+            }
+            if (attemptsLeft <= 0)
+            {
+                MessageBox.Show($"Game over! You lost Guess The Number Game!\nNo attempts left! The number was {secretNumber}.");
+                GameOver(false);
+                return;
+            }
+            if (guess < secretNumber)
+            {
+                MessageBox.Show("Too low!");
+            }
+            else
+            {
+                MessageBox.Show("Too high!");
+            }
             textBoxGuess.Text = "";
             textBoxGuess.Focus();
         }
