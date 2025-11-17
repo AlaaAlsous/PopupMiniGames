@@ -95,5 +95,19 @@ namespace MiniGames.MiniGames
             );
             this.ShowDialog();
         }
+        private void StartNewRound(Difficulty difficulty)
+        {
+            secretNumber = random.Next(1, 101);
+            attemptsLeft = difficulty switch
+            {
+                Difficulty.Easy => 12,
+                Difficulty.Medium => 10,
+                Difficulty.Hard => 7,
+                _ => 10
+            };
+            labelAttempts.Text = $"Attempts: {attemptsLeft}";
+            textBoxGuess.Text = "";
+            textBoxGuess.Focus();
+        }
     }
 }
