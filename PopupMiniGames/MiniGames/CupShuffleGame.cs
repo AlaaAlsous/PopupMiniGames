@@ -53,7 +53,7 @@ namespace MiniGames.MiniGames
                     Font = new Font("Arial", 16, FontStyle.Bold)
                 };
 
-                string titlePath = Path.Combine(assetsPath, "Title.png");
+                string titlePath = Path.Combine(assetsPath, "Title.png"); // W.I.P .-.
                 if (File.Exists(titlePath))
                     titleImage.Image = Image.FromFile(titlePath);
 
@@ -98,6 +98,60 @@ namespace MiniGames.MiniGames
                 parentContainer.Controls.Add(cup);
                 cup.BringToFront();
             }
+        }
+        private void OnCupSelected(int selectedIndex)
+        {
+            var cup = cups[selectedIndex];
+            bool won = selectedIndex == correctIndex;
+
+            string gifPath = Path.Combine(assetsPath, won ? "BOX_OPEN_CAT.gif" : "BOX_OPEN_EMPTY.gif");
+            if (File.Exists(gifPath))
+                cup.Image = Image.FromFile(gifPath);
+
+            if (won)
+                correctGuesses++;
+            else
+                wrongGuesses++;
+
+            PictureBox resultBox = new PictureBox
+            {
+                Size = new Size(300, 150),
+                Location = new Point((parentContainer.Width - 300) / 2, 50),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.Transparent,
+                Name = "ResultBox"
+            };
+
+            string resultImage = Path.Combine(assetsPath, won ? "CORRECT.png" : "WRONG.png");
+            if (File.Exists(resultImage))
+                resultBox.Image = Image.FromFile(resultImage);
+
+            parentContainer.Controls.Add(resultBox);
+            resultBox.BringToFront();
+
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+            timer.Interval = 1900;
+            timer.Tick += (s, e) =>
+            {
+                timer.Stop();
+                timer.Dispose();
+
+                parentContainer.Controls.Remove(resultBox);
+
+                if (correctGuesses >= 5)
+                {
+                    EndGame(true);
+                    return;
+                }
+
+                if (wrongGuesses >= 4)
+                {
+                    EndGame(false);
+                    return;
+                }
+                SetupGameUI(currentDifficulty);
+            };
+            timer.Start();
         }
 
     }
