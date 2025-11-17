@@ -79,5 +79,21 @@ namespace MiniGames.MiniGames
             this.Controls.Add(buttonGuess);
             this.Controls.Add(currentDifficultyLabel);
         }
+        public void StartGame(Difficulty difficulty)
+        {
+            currentDifficulty = difficulty;
+            currentDifficultyLabel.Text = $"Difficulty: {difficulty}";
+            MessageBox.Show(
+                $"Welcome to Guess The Number Game!\n\n" +
+                $"You must guess a number between 1 and 100.\n" +
+                $"• Difficulty: {difficulty}\n" +
+                $"• Number of attempts: {(difficulty == Difficulty.Easy ? 12 : difficulty == Difficulty.Medium ? 10 : 7)}\n\n" +
+                $"Good luck!",
+                "Game Instructions",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+            this.ShowDialog();
+        }
     }
 }
