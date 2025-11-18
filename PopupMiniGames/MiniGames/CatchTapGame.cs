@@ -65,5 +65,35 @@ namespace MiniGames.MiniGames
                 scoreLabel.BringToFront();
             }
         }
+        private void ShowNextObject()
+        {
+            if (gameOver) return;
+            if (totalPopups >= maxPopups)
+            {
+                EndGame(score >= targetScore);
+                return;
+            }
+
+            totalPopups++;
+
+            PictureBox obj = new PictureBox
+            {
+                Size = new Size(100, 100),
+                Location = new Point(Math.Max(0, rand.Next(Math.Max(1, parentContainer.Width - 100))),
+                                    Math.Max(0, rand.Next(100, Math.Max(101, parentContainer.Height - 100)))),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.Transparent,
+                Cursor = Cursors.Hand,
+                Tag = false
+            };
+
+            string fadeGif = Path.Combine(assetsPath, "BopCat.gif");
+            if (File.Exists(fadeGif))
+                obj.Image = Image.FromFile(fadeGif);
+
+            objects.Add(obj);
+            parentContainer.Controls.Add(obj);
+            obj.BringToFront();
+        }
     }
 }
