@@ -65,6 +65,7 @@ namespace MiniGames.MiniGames
             };
             timer = new System.Windows.Forms.Timer();
             timer.Interval = 1000;
+            timer.Tick += TimerTick;
             this.Controls.Add(labelTime);
             this.Controls.Add(clickButton);
             this.FormClosed += (s, e) => timer.Stop();
@@ -103,6 +104,25 @@ namespace MiniGames.MiniGames
             );
             timer.Start();
             this.ShowDialog();
+        }
+        private void TimerTick(object? sender, EventArgs e)
+        {
+            timeLeft--;
+            labelTime.Text = $"Time left: {timeLeft}";
+            if (timeLeft <= 0)
+            {
+                timer.Stop();
+                MessageBox.Show($"Time is up! You've clicked ({clicks}) times.");
+                bool won = clicks >= winClicks;
+                MessageBox.Show(won ? "Congratulations! You won Click The Button Game!" : "Game over! You lost Click The Button Game!");
+                GameEnded?.Invoke(this, new GameResult
+                {
+                    Points = won ? 10 : 0,
+                    Mistakes = won ? 0 : 5,
+                    Won = won
+                });
+                this.Close();
+            }
         }
     }
 }
