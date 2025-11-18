@@ -10,7 +10,6 @@ namespace MiniGames.MiniGames
     {
         public event EventHandler<GameResult>? GameEnded;
         private List<System.Windows.Forms.Timer> activeTimers = new List<System.Windows.Forms.Timer>();
-
         private Control parentContainer = null!;
         private List<PictureBox> objects = new List<PictureBox>();
         private Random rand = new Random();
@@ -32,6 +31,16 @@ namespace MiniGames.MiniGames
         );
 
         private bool gameOver = false;
+                private int GetPopupInterval(Difficulty difficulty)
+        {
+            return difficulty switch
+            {
+                Difficulty.Easy => 2500,   // 2,5 sek
+                Difficulty.Medium => 2000, // 2 sek
+                Difficulty.Hard => 1200,   // 1,2 sek
+                _ => 2000
+            };
+        }
         public void StartGame(Difficulty difficulty)
         {
             if (parentContainer == null)
@@ -262,6 +271,45 @@ namespace MiniGames.MiniGames
                 Points = score,
                 Mistakes = mistakes
             });
-        }            
+        }  
+        public void Cleanup()
+        {
+            // Stoppa och ta bort timers ifall någon finns kvar
+            lock (activeTimers)
+            {
+                foreach (var t in activeTimers)
+                {
+                    try
+                    {
+                        t.Stop();
+                        t.Dispose();
+                    }
+                    catch { }
+                }
+                activeTimers.Clear();
+            }
+
+            foreach (var obj in objects)
+            {
+                try
+                {
+                    parentContainer.Controls.Remove(obj);
+                    obj.Dispose();
+                }
+                catch { }
+            }
+            objects.Clear();
+
+            if (scoreLabel != null)
+            {
+                try
+                {
+                    parentContainer.Controls.Remove(scoreLabel);
+                    scoreLabel.Dispose();
+                }
+                catch { }
+                scoreLabel = null;
+            }
+        }                  
     }
 }
