@@ -205,6 +205,31 @@ namespace MiniGames.MiniGames
 
             ShowNextObject();
         }
-      
+        private void HandleMiss(PictureBox obj)
+        {
+            if (gameOver) return;
+
+            if (objects.Contains(obj))
+            {
+                parentContainer.Controls.Remove(obj);
+                objects.Remove(obj);
+            }
+
+            mistakes++;
+
+            if (mistakes >= maxMistakes)
+            {
+                EndGame(false);
+                return;
+            }
+
+            if (totalPopups >= maxPopups)
+            {
+                EndGame(score >= targetScore);
+                return;
+            }
+
+            ShowNextObject();
+        }      
     }
 }
