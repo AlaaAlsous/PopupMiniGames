@@ -184,6 +184,27 @@ namespace MiniGames.MiniGames
                 }
             };
         }
+        private void HandleClick(PictureBox obj)
+        {
+            if (gameOver) return;
+
+            if (objects.Contains(obj))
+            {
+                parentContainer.Controls.Remove(obj);
+                objects.Remove(obj);
+            }
+
+            score++;
+            scoreLabel!.Text = $"Score: {score}";
+
+            if (score >= targetScore)
+            {
+                EndGame(true);
+                return;
+            }
+
+            ShowNextObject();
+        }
       
     }
 }
