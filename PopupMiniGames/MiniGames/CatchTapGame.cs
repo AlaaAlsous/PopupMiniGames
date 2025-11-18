@@ -230,6 +230,38 @@ namespace MiniGames.MiniGames
             }
 
             ShowNextObject();
-        }      
+        }  
+        private void EndGame(bool won)
+        {
+            if (gameOver) return;
+            gameOver = true;
+
+            // STOPPA ALLA TIMERS
+            lock (activeTimers)
+            {
+                foreach (var t in activeTimers)
+                {
+                    try
+                    {
+                        t.Stop();
+                        t.Dispose();
+                    }
+                    catch { }
+                }
+                activeTimers.Clear();
+            }
+            string resultMessage = won 
+                ? $"Congratulations! You won with {score} points!" 
+                : $"Game Over! You scored {score} points with {mistakes} mistakes.";
+            MessageBox.Show(resultMessage, "Game Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            Cleanup();
+            GameEnded?.Invoke(this, new GameResult
+            {
+                Won = won,
+                Points = score,
+                Mistakes = mistakes
+            });
+        }            
     }
 }
