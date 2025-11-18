@@ -94,6 +94,96 @@ namespace MiniGames.MiniGames
             objects.Add(obj);
             parentContainer.Controls.Add(obj);
             obj.BringToFront();
+        
+        // --- Miss-timer ---
+            int interval = GetPopupInterval(difficulty); // livstid för objekt
+            System.Windows.Forms.Timer missTimer = new System.Windows.Forms.Timer { Interval = interval };
+            activeTimers.Add(missTimer);
+
+            missTimer.Tick += (s, e) =>
+            {
+                if (gameOver)
+                {
+                    missTimer.Stop();
+                    missTimer.Dispose();
+                    lock (activeTimers) { activeTimers.Remove(missTimer); }
+                    return;
+                }
+
+                missTimer.Stop();
+                missTimer.Dispose();
+                lock (activeTimers) { activeTimers.Remove(missTimer); }
+
+                
+                if ((bool)obj.Tag == true) return;
+
+                if (parentContainer.InvokeRequired)
+                {
+                    parentContainer.BeginInvoke(new Action(() =>
+                    {
+                        if (objects.Contains(obj))
+                        {
+                            parentContainer.Controls.Remove(obj);
+                            objects.Remove(obj);
+                        }
+                        ProcessMissOrEnd();
+                    }));
+                }
+                else
+                {
+                    if (objects.Contains(obj))
+                    {
+                        parentContainer.Controls.Remove(obj);
+                        objects.Remove(obj);
+                    }
+                    ProcessMissOrEnd();
+                }
+
+                void ProcessMissOrEnd()
+                {
+                    mistakes++;
+                    if (mistakes >= maxMistakes)
+                    {
+                        EndGame(false);
+                    }
+                    else if (totalPopups >= maxPopups)
+                    {
+                        EndGame(score >= targetScore);
+                    }
+                    else
+                    {
+                        ShowNextObject();
+                    }
+                }
+            };
+            missTimer.Start();
+
+            // --- Klick-event ---
+            obj.Click += (s, e) =>
+            {
+                if (gameOver) return;
+                if ((bool)obj.Tag == true) return;
+
+                obj.Tag = true;
+
+                try
+                {
+                    missTimer.Stop();
+                    missTimer.Dispose();
+                    lock (activeTimers) { activeTimers.Remove(missTimer); }
+                }
+                catch { }
+
+                if (parentContainer.InvokeRequired)
+                {
+                    parentContainer.BeginInvoke(new Action(() => HandleClick(obj)));
+                }
+                else
+                {
+                    HandleClick(obj);
+                }
+            };
         }
+      
     }
 }
