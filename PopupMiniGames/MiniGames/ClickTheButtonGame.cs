@@ -71,5 +71,38 @@ namespace MiniGames.MiniGames
             this.Controls.Add(winClicksLebel);
             this.Controls.Add(currentDifficultyLabel);
         }
+        public void StartGame(Difficulty difficulty)
+        {
+            currentDifficulty = difficulty;
+            clicks = 0;
+            switch (difficulty)
+            {
+                case Difficulty.Easy:
+                    timeLeft = 10;
+                    winClicks = 12;
+                    break;
+                case Difficulty.Medium:
+                    timeLeft = 12;
+                    winClicks = 20;
+                    break;
+                case Difficulty.Hard:
+                    timeLeft = 15;
+                    winClicks = 25;
+                    break;
+            }
+            currentDifficultyLabel.Text = $"Difficulty: {currentDifficulty}";
+            winClicksLebel.Text = $"You must click ({winClicks}) times to win";
+            labelTime.Text = $"Time left: {timeLeft}";
+            MessageBox.Show(
+            $"Click the button as many times as you can before time runs out\n" +
+            $"Time is: {timeLeft} seconds\n\n" +
+            $"You must click at least {winClicks} times to win.",
+            "Instructions",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information
+            );
+            timer.Start();
+            this.ShowDialog();
+        }
     }
 }
