@@ -10,7 +10,6 @@ namespace MiniGames.MiniGames
     {
         public event EventHandler<GameResult>? GameEnded;
 
-        private PictureBox? background;
         private Random rand = new Random();
         private List<PictureBox> cups = new List<PictureBox>();
         private int correctIndex = 0;
@@ -27,7 +26,7 @@ namespace MiniGames.MiniGames
         {
             currentDifficulty = difficulty;
             if (parentContainer == null)
-                parentContainer = Application.OpenForms[0];
+                parentContainer = Application.OpenForms[0]!;
 
             SetupGameUI(difficulty);
         }
@@ -189,7 +188,7 @@ namespace MiniGames.MiniGames
             {
                 parentContainer.Controls.Remove(instructionLabel);
                 instructionLabel.Dispose();
-                instructionLabel = null;
+                instructionLabel = null!;
             }
 
             var resultBox = parentContainer.Controls["ResultBox"];
