@@ -72,6 +72,7 @@ namespace MiniGames.MiniGames
             this.Controls.Add(winClicksLebel);
             this.Controls.Add(currentDifficultyLabel);
         }
+
         public void StartGame(Difficulty difficulty)
         {
             currentDifficulty = difficulty;
@@ -105,6 +106,7 @@ namespace MiniGames.MiniGames
             timer.Start();
             this.ShowDialog();
         }
+
         private void TimerTick(object? sender, EventArgs e)
         {
             timeLeft--;
@@ -124,6 +126,7 @@ namespace MiniGames.MiniGames
                 this.Close();
             }
         }
+
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if ((keyData & Keys.KeyCode) == Keys.Enter || (keyData & Keys.KeyCode) == Keys.Space)
@@ -131,6 +134,25 @@ namespace MiniGames.MiniGames
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        public void Cleanup()
+        {
+            if (timer != null)
+            {
+                timer.Stop();
+                timer.Tick -= TimerTick;
+            }
+            if (clickButton != null)
+                clickButton.Click -= null;
+            foreach (Control c in this.Controls)
+            {
+                c.Dispose();
+            }
+            this.Controls.Clear();
+            this.Hide();
+            this.Close();
+            this.Dispose();
         }
     }
 }
