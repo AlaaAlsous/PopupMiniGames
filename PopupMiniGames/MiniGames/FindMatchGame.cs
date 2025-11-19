@@ -34,3 +34,34 @@ namespace MiniGames.MiniGames
         {
             parentContainer = parent;
         }
+                private void LoadImages()
+        {
+            imagePool.Clear();
+
+            if (!Directory.Exists(findMatchPath))
+            {
+                MessageBox.Show($"Bildmappen hittades inte:\n{Path.GetFullPath(findMatchPath)}");
+                return;
+            }
+
+            string[] files = Directory.GetFiles(findMatchPath, "*.*")
+                                    .Where(f => f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                                                f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                                f.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                                                f.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                                    .ToArray();
+
+            foreach (string file in files)
+            {
+                try
+                {
+                    Image img = Image.FromFile(file);
+                    string name = Path.GetFileName(file); // filnamnet sparas
+                    imagePool.Add((img, name));
+                }
+                catch { }
+            }
+
+            if (imagePool.Count < 2)
+                MessageBox.Show("Behöver minst 2 bilder för spelet!");
+        }
