@@ -16,11 +16,13 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
         private Collider collider;
 
         private int flightStrength = 13;
-        public FlappyController(Point position, Game game, string imageFilePath) : base(position, game)
+        private FlappyKalle flappyKalle;
+        public FlappyController(Point position, Game game, string imageFilePath, FlappyKalle flappyKalle) : base(position, game)
         {
             Position = new Point(100, 300);
             sprite = new Sprite(this, Point.Empty, imageFilePath);
             AddComponent(sprite);
+            this.flappyKalle = flappyKalle;
 
             collider = new Collider(this);
             //sprite is 120x120, this gives 20 pixel room on each side that doesn't have collision
@@ -41,7 +43,24 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
             this.Position = new Point(x, y);
 
             sprite.Rotation = Math.Clamp((int)velocity * 3, -50, 50);
+
+            CheckCollided(Game.Colliders);
         }
+
+        private void CheckCollided(List<Collider> others)
+        {
+            foreach (Collider other in others)
+            {
+                if (other == collider) continue;
+
+                if (collider.Overlaps(other))
+                {
+                    flappyKalle.ChangeScore(0, 1);
+                    Game.RemoveGameObject(other.Parent);
+                }
+            }
+        }
+
         override public void OnKeyDown(KeyEventArgs e)
         {
             switch (e.KeyCode)
