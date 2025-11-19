@@ -39,5 +39,12 @@ namespace PopupMiniGames.GameAssets.PolarEngine
 
             Renderer.UpdateFrame();
         }
+
+        public void AddGameObject(GameObject obj)
+        {
+            GameObjects.Add(obj);
+            List<Sprite> sprites = obj.Components.OfType<Sprite>().ToList();
+            foreach (Sprite sprite in sprites) { Renderer.AddSprite(sprite); }
+        }
     }
 }
