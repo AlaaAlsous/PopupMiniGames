@@ -17,6 +17,8 @@ namespace MiniGames.MiniGames
         private Button guessButton;
         private int mistakes = 0, maxMistakes = 0;
         private Difficulty currentDifficulty;
+        private GameData gameData;
+        private GameResult result = new GameResult();
         private readonly List<string> easyWords = new List<string>()
         {
             "CAT", "DOG", "CAR", "SUN", "MAP","SEE","CUP",
@@ -32,7 +34,7 @@ namespace MiniGames.MiniGames
             "APPLE", "HOUSE", "BRAIN", "LIGHT", "SOUND","HUMAN",
             "WATER", "STONE", "SMILE", "PLANT", "HEART",
         };
-        public HangmanGame()
+        public HangmanGame(GameData data)
         {
             this.Text = "Hangman Game";
             this.Size = new Size(500, 300);
@@ -85,6 +87,7 @@ namespace MiniGames.MiniGames
             this.Controls.Add(labelInfo);
             this.Controls.Add(inputBox);
             this.Controls.Add(guessButton);
+            this.gameData = data;
         }
 
         public void StartGame(Difficulty difficulty)
@@ -159,8 +162,7 @@ namespace MiniGames.MiniGames
 
                 if (!labelWord.Text.Contains("_"))
                 {
-                    MessageBox.Show($"Congratulations!\nYou won Hangman Game! The word was ({secretWord})");
-                    EndGame(true);
+                    GameOver(true);
                 }
             }
             else
@@ -170,8 +172,8 @@ namespace MiniGames.MiniGames
                 labelInfo.Text = $"Mistakes: {mistakes}/{maxMistakes}";
                 if (mistakes >= maxMistakes)
                 {
-                    MessageBox.Show($"Game over!\nYou lost Hangman Game! The word was {secretWord}");
-                    EndGame(false);
+                    MessageBox.Show($"The word was ({secretWord})");
+                    GameOver(false);
                 }
             }
             inputBox.Focus();
@@ -182,16 +184,19 @@ namespace MiniGames.MiniGames
             return string.Join(" ", secretWord.Select(c => guessedLetters.Contains(c) ? c : '_'));
         }
 
-        private void EndGame(bool won)
+        private void GameOver(bool won)
         {
-            GameEnded?.Invoke(this, new GameResult
+            result = new GameResult
             {
-                Won = won,
                 Points = won ? 10 : 0,
-                Mistakes = won ? 0 : 5
-            });
+                Mistakes = won ? 0 : 5,
+                Won = won,
+                GameName = "Hangman Game"
+            };
+            GameEnded?.Invoke(this, result);
             this.Close();
         }
+
         public void Cleanup()
         {
             guessButton.Click -= GuessButtonClick;
