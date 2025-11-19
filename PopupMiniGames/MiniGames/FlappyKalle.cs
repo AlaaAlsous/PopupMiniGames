@@ -16,8 +16,10 @@ namespace MiniGames.MiniGames
 
         private int mistakes = 0;
         private int maxMistakes = 10;
+        private int mistakeMultiplier = 1;
         private int score = 0;
         private int maxScore = 10;
+        private int scoreRatio = 2; //Sets the amount of in game score per actual score(that the mainform takes)
         public void StartGame(Difficulty difficulty)
         {
             form.FormBorderStyle = FormBorderStyle.None;
@@ -31,12 +33,12 @@ namespace MiniGames.MiniGames
             game.Renderer.BackgroundColor = Color.LightSkyBlue;
             form.Controls.Add(game.Renderer);
 
+
             PipeSpawner pipeSpawner = new PipeSpawner(Point.Empty, game, this);
             game.AddGameObject(pipeSpawner);
             FlappyController player = new FlappyController(new Point(100, 200), game, Path.Combine(assetsPath, "KalleAnkaFace.png"), this);
             game.AddGameObject(player);
             game.Start();
-
             form.KeyDown += game.OnKeyDown;
             SetDifficulty(difficulty, pipeSpawner);
             form.ShowDialog();
@@ -44,15 +46,16 @@ namespace MiniGames.MiniGames
         }
         public void ChangeScore(int addedScore, int addedMistakes)
         {
-            score = Math.Min(score+addedScore, maxScore);
-            mistakes = Math.Min(mistakes+addedMistakes, maxMistakes);
+            addedMistakes = addedMistakes * mistakeMultiplier;
+            score = Math.Min(score + addedScore, maxScore);
+            mistakes = Math.Min(mistakes + addedMistakes, maxMistakes);
 
             if (mistakes >= maxMistakes)
-            { 
+            {
                 EndGame(false);
             }
             if (score >= maxScore)
-            { 
+            {
                 EndGame(true);
             }
 
@@ -62,27 +65,35 @@ namespace MiniGames.MiniGames
             switch (difficulty)
             {
                 case Difficulty.Easy:
+                    scoreRatio = 2;
                     pipeSpawner.TimeBetweenSpawns = 6;
                     pipeSpawner.Speed = 120;
                     pipeSpawner.MiddleSpace = 320;
+                    mistakeMultiplier = 1;
                     break;
                 case Difficulty.Medium:
+                    scoreRatio = 3;
                     pipeSpawner.TimeBetweenSpawns = 2.6f;
                     pipeSpawner.Speed = 200;
                     pipeSpawner.MiddleSpace = 260;
+                    mistakeMultiplier = 1;
                     break;
                 case Difficulty.Hard:
+                    scoreRatio = 4;
                     pipeSpawner.TimeBetweenSpawns = 1.8f;
                     pipeSpawner.Speed = 360;
                     pipeSpawner.MiddleSpace = 200;
+                    mistakeMultiplier = 2;
                     break;
             }
+            maxScore = 10 * scoreRatio;
         }
 
         private void EndGame(bool won)
         {
             game.Stop();
             form.Close();
+            score = score / scoreRatio;
             string resultMessage = won
                 ? $"You won with a score of {score}, with {mistakes} mistakes.!"
                 : $"Game Over! \n You got a score of {score} with {mistakes} mistakes.";
