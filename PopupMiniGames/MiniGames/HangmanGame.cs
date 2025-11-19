@@ -101,6 +101,7 @@ namespace MiniGames.MiniGames
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information
             );
+            secretWord = PickWord(difficulty);
             guessedLetters.Clear();
             mistakes = 0;
             labelInfo.Text = $"Mistakes: {mistakes}/{maxMistakes}";
@@ -116,6 +117,17 @@ namespace MiniGames.MiniGames
                 Difficulty.Medium => 9,
                 Difficulty.Hard => 8,
                 _ => 9
+            };
+        }
+        private string PickWord(Difficulty difficulty)
+        {
+            var random = new Random();
+            return difficulty switch
+            {
+                Difficulty.Easy => easyWords[random.Next(easyWords.Count)],
+                Difficulty.Medium => mediumWords[random.Next(mediumWords.Count)],
+                Difficulty.Hard => hardWords[random.Next(hardWords.Count)],
+                _ => mediumWords[random.Next(mediumWords.Count)]
             };
         }
     }
