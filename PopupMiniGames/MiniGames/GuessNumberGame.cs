@@ -15,7 +15,9 @@ namespace MiniGames.MiniGames
         private Label labelQuestion, labelAttempts, currentDifficultyLabel;
         private TextBox textBoxGuess;
         private Button buttonGuess;
-        public GuessNumberGame()
+        private GameData gameData;
+        private GameResult result = new GameResult();
+        public GuessNumberGame(GameData data)
         {
             this.Text = "Guess The Number Game";
             this.Width = 700;
@@ -79,10 +81,12 @@ namespace MiniGames.MiniGames
             this.Controls.Add(textBoxGuess);
             this.Controls.Add(buttonGuess);
             this.Controls.Add(currentDifficultyLabel);
+            this.gameData = data;
         }
         public void StartGame(Difficulty difficulty)
         {
             currentDifficulty = difficulty;
+            gameData.SetDifficulty(difficulty);
             currentDifficultyLabel.Text = $"Difficulty: {difficulty}";
             MessageBox.Show(
                 $"Welcome to Guess The Number Game!\n\n" +
@@ -122,13 +126,12 @@ namespace MiniGames.MiniGames
             labelAttempts.Text = $"Attempts: {attemptsLeft}";
             if (guess == secretNumber)
             {
-                MessageBox.Show("Correct!\nCongratulations! You won Guess The Number Game!");
                 GameOver(true);
                 return;
             }
             if (attemptsLeft <= 0)
             {
-                MessageBox.Show($"Game over! You lost Guess The Number Game!\nNo attempts left! The number was {secretNumber}.");
+                MessageBox.Show($"The number was: ({secretNumber})");
                 GameOver(false);
                 return;
             }
@@ -143,16 +146,20 @@ namespace MiniGames.MiniGames
             textBoxGuess.Text = "";
             textBoxGuess.Focus();
         }
+
         private void GameOver(bool won)
         {
-            GameEnded?.Invoke(this, new GameResult
+            result = new GameResult
             {
                 Points = won ? 10 : 0,
                 Mistakes = won ? 0 : 5,
-                Won = won
-            });
+                Won = won,
+                GameName = "Guess The Number Game",
+            };
+            GameEnded?.Invoke(this, result);
             this.Close();
         }
+
         public void Cleanup()
         {
             buttonGuess.Click -= ButtonGuessClick!;
