@@ -205,4 +205,40 @@ namespace MiniGames.MiniGames
                 optionBoxes.Add(box);
             }
         }
+                private bool ImagesAreEqual(Image a, Image b)
+        {
+            if (a == null || b == null) return false;
+            return a == b; 
+        }
+
+        private void OptionClick(object sender, EventArgs e)
+        {
+            if (gameOver) return;
+
+            PictureBox clicked = sender as PictureBox;
+            bool isCorrect = (bool)clicked.Tag;
+
+            roundTimer?.Stop();
+            roundTimer?.Dispose();
+            roundTimer = null;
+
+            if (isCorrect)
+            {
+                ShowNextRound();
+            }
+            else
+            {
+                mistakes++;
+                clicked.BorderStyle = BorderStyle.Fixed3D;
+
+                if (mistakes >= maxMistakes)
+                {
+                    EndGame(false);
+                }
+                else
+                {
+                    ShowNextRound();
+                }
+            }
+        }
         
