@@ -15,6 +15,9 @@ namespace PopupMiniGames.GameAssets.PolarEngine
         public List<GameObject> GameObjects { get; protected set; } = new List<GameObject>();
         public GameRenderer Renderer { get; set; } = new GameRenderer();
 
+        private List<GameObject> pendingRemovals = new List<GameObject>();
+        private List<GameObject> pendingAdds = new List<GameObject>();
+
         public Game() { }
 
         public void Start()
@@ -40,14 +43,64 @@ namespace PopupMiniGames.GameAssets.PolarEngine
             {
                 obj.Update(deltaTime);
             }
+            ApplyPendingChanges();
             Renderer.UpdateFrame();
         }
 
         public void AddGameObject(GameObject obj)
         {
-            GameObjects.Add(obj);
-            List<Sprite> sprites = obj.Components.OfType<Sprite>().ToList();
-            foreach (Sprite sprite in sprites) { Renderer.AddSprite(sprite); }
+            if (obj == null) return;
+            if (GameObjects.Contains(obj) || pendingAdds.Contains(obj)) return;
+            if (pendingRemovals.Remove(obj)) return;
+
+            obj.Game = this;
+            pendingAdds.Add(obj);
         }
+
+        public void RemoveGameObject(GameObject obj)
+        {
+            if (obj == null) return;
+
+            if (pendingAdds.Remove(obj)) return;
+
+            if (GameObjects.Contains(obj) && !pendingRemovals.Contains(obj))
+            {
+                pendingRemovals.Add(obj);
+            }
+        }
+
+        private void ApplyPendingChanges()
+        {
+            if (pendingAdds.Count > 0)
+            {
+                var adds = pendingAdds.ToArray();
+                pendingAdds.Clear();
+                foreach (var obj in adds)
+                {
+                    if (obj == null) continue;
+                    if (GameObjects.Contains(obj)) continue;
+
+                    obj.Game = this;
+                    GameObjects.Add(obj);
+
+                    foreach (Sprite sprite in obj.Components.OfType<Sprite>()) Renderer.AddSprite(sprite);
+                }
+            }
+
+            if (pendingRemovals.Count > 0)
+            {
+                var removes = pendingRemovals.ToArray();
+                pendingRemovals.Clear();
+                foreach (var obj in removes)
+                {
+                    if (obj == null) continue;
+
+                    foreach (Sprite sprite in obj.Components.OfType<Sprite>()) Renderer.RemoveSprite(sprite);
+
+                    GameObjects.Remove(obj);
+                }
+            }
+        }
+
     }
 }
