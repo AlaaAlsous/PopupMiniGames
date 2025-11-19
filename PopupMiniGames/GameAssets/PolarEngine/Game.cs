@@ -13,6 +13,7 @@ namespace PopupMiniGames.GameAssets.PolarEngine
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         private Stopwatch stopwatch = new Stopwatch();
         public List<GameObject> GameObjects { get; protected set; } = new List<GameObject>();
+        public List<Collider> Colliders { get; protected set; } = new List<Collider>();
         public GameRenderer Renderer { get; set; } = new GameRenderer();
 
         private List<GameObject> pendingRemovals = new List<GameObject>();
@@ -84,6 +85,11 @@ namespace PopupMiniGames.GameAssets.PolarEngine
                     GameObjects.Add(obj);
 
                     foreach (Sprite sprite in obj.Components.OfType<Sprite>()) Renderer.AddSprite(sprite);
+                    foreach (Collider collider in obj.Components.OfType<Collider>())
+                    {
+                        Colliders.Add(collider);
+                        collider.Game = this; //this should already be set, but why not do it again
+                    }
                 }
             }
 
@@ -96,7 +102,11 @@ namespace PopupMiniGames.GameAssets.PolarEngine
                     if (obj == null) continue;
 
                     foreach (Sprite sprite in obj.Components.OfType<Sprite>()) Renderer.RemoveSprite(sprite);
-
+                    foreach (Collider collider in obj.Components.OfType<Collider>())
+                    {
+                        Colliders.Remove(collider);
+                        collider.Game = default!;
+                    }
                     GameObjects.Remove(obj);
                 }
             }
