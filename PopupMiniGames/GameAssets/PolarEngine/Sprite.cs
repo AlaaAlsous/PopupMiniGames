@@ -4,11 +4,13 @@ using System.IO;
 
 namespace PopupMiniGames.GameAssets.PolarEngine
 {
-    public class Sprite : Component
+    public class Sprite : Component, IDisposable
     {
         public Image SpriteImage { get; set; }
         public Point Position { get; set; }
         public int Rotation { get; set; }
+
+        private bool disposed = false;
 
         public Sprite(GameObject parentObject, Point position, string? filePath = null, int rotation = 0) : base(parentObject)
         {
@@ -29,11 +31,20 @@ namespace PopupMiniGames.GameAssets.PolarEngine
                 SpriteImage = bmp;
             }
         }
+
         public Point GetTruePosition()
         {
             int x = Position.X + Parent.Position.X;
             int y = Position.Y + Parent.Position.Y;
             return new Point(x, y);
+        }
+
+        public void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+            SpriteImage?.Dispose();
+            SpriteImage = null;
         }
     }
 }

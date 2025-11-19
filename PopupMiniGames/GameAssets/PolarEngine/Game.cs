@@ -145,7 +145,6 @@ namespace PopupMiniGames.GameAssets.PolarEngine
 
             Renderer.Dispose();
             timer.Dispose();
-            Renderer?.Dispose();
             Renderer = default!;
         }
     }
