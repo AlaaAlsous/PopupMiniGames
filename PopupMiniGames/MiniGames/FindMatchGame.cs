@@ -163,3 +163,46 @@ namespace MiniGames.MiniGames
             }
             ShowNextRound();
         }
+                private void GenerateOptions((Image img, string name) target)
+        {
+            int startX = 40;
+            int startY = 200;
+            int spacing = 110;
+            int imagesPerRow = 10;
+
+            List<(Image img, string name)> wrongImages = imagePool.Where(x => x.name != target.name).ToList();
+
+            if (wrongImages.Count < totalOptions - 1)
+            {
+                MessageBox.Show("Inte tillräckligt med unika bilder för alternativen!");
+                return;
+            }
+
+            wrongImages = wrongImages.OrderBy(x => rng.Next()).ToList();
+
+            List<(Image img, string name)> options = new List<(Image img, string name)>();
+            options.AddRange(wrongImages.Take(totalOptions - 1));
+            options.Add(target); // target finns alltid med
+            options = options.OrderBy(x => rng.Next()).ToList();
+
+            for (int i = 0; i < totalOptions; i++)
+            {
+                var opt = options[i];
+
+                PictureBox box = new PictureBox
+                {
+                    Image = opt.img,
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Size = new Size(90, 90),
+                    Location = new Point(startX + (i % imagesPerRow) * spacing,
+                                        startY + (i / imagesPerRow) * spacing),
+                    BorderStyle = BorderStyle.FixedSingle,
+                    Tag = (opt.name == target.name) // true = korrekt
+                };
+
+                box.Click += OptionClick;
+                parentContainer.Controls.Add(box);
+                optionBoxes.Add(box);
+            }
+        }
+        
