@@ -14,9 +14,11 @@ namespace MiniGames.MiniGames
         private System.Windows.Forms.Timer timer;
         private int timeLeft, clicks, winClicks = 0;
         private Random place = new Random();
-        public ClickTheButtonGame()
+        private GameData gameData;
+        private GameResult result = new GameResult();
+        public ClickTheButtonGame(GameData data)
         {
-            this.Text = "Click The Button Game!";
+            this.Text = "Click The Button Game";
             this.Size = new Size(400, 400);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.ShowInTaskbar = false;
@@ -71,11 +73,13 @@ namespace MiniGames.MiniGames
             this.FormClosed += (s, e) => timer.Stop();
             this.Controls.Add(winClicksLebel);
             this.Controls.Add(currentDifficultyLabel);
+            this.gameData = data;
         }
 
         public void StartGame(Difficulty difficulty)
         {
             currentDifficulty = difficulty;
+            gameData.SetDifficulty(difficulty);
             clicks = 0;
             switch (difficulty)
             {
@@ -114,17 +118,32 @@ namespace MiniGames.MiniGames
             if (timeLeft <= 0)
             {
                 timer.Stop();
-                MessageBox.Show($"Time is up! You've clicked ({clicks}) times.");
-                bool won = clicks >= winClicks;
-                MessageBox.Show(won ? "Congratulations! You won Click The Button Game!" : "Game over! You lost Click The Button Game!");
-                GameEnded?.Invoke(this, new GameResult
+
+                if (clicks >= winClicks)
                 {
-                    Points = won ? 10 : 0,
-                    Mistakes = won ? 0 : 5,
-                    Won = won
-                });
-                this.Close();
+                    MessageBox.Show($"Time's up! You clicked {clicks} times. You won!");
+                    GameOver(true);
+                }
+                else
+                {
+                    MessageBox.Show($"Time's up! You clicked {clicks} times. You lost!");
+                    GameOver(false);
+                }
             }
+        }
+
+        private void GameOver(bool won)
+        {
+            timer.Stop();
+            result = new GameResult
+            {
+                Points = won ? 10 : 0,
+                Mistakes = won ? 0 : 5,
+                Won = won,
+                GameName = "Click The Button Game",
+            };
+            GameEnded?.Invoke(this, result);
+            this.Close();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -143,8 +162,6 @@ namespace MiniGames.MiniGames
                 timer.Stop();
                 timer.Tick -= TimerTick;
             }
-            if (clickButton != null)
-                clickButton.Click -= null;
             foreach (Control c in this.Controls)
             {
                 c.Dispose();

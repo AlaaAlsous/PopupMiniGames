@@ -13,5 +13,6 @@ namespace MiniGames
         public bool Won { get; set; }
         public int Points { get; set; }
         public int Mistakes { get; set; }
+        public string GameName { get; set; } = "";
     }
 }
