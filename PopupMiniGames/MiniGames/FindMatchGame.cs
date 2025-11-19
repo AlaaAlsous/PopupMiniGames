@@ -262,4 +262,28 @@ namespace MiniGames.MiniGames
                 Mistakes = mistakes
             });
         }
+                public void Cleanup()
+        {
+            if (parentContainer is Form mainForm)
+                mainForm.TopMost = false;
+            if (targetPicture != null)
+            {
+                parentContainer.Controls.Remove(targetPicture);
+                targetPicture.Dispose();
+                targetPicture = null;
+            }
+
+            foreach (var b in optionBoxes)
+            {
+                try
+                {
+                    parentContainer.Controls.Remove(b);
+                    b.Dispose();
+                }
+                catch { }
+            }
+            optionBoxes.Clear();
+        }
+    }
+}
         
