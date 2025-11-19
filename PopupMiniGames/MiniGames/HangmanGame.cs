@@ -85,5 +85,27 @@ namespace MiniGames.MiniGames
             this.Controls.Add(inputBox);
             this.Controls.Add(guessButton);
         }
+        public void StartGame(Difficulty difficulty)
+        {
+            currentDifficulty = difficulty;
+            currentDifficultyLabel.Text = $"Difficulty: {difficulty}";
+            MessageBox.Show(
+                $"Welcome to Hangman Game!\n\n" +
+                $"Your goal is to guess the hidden word before you run out of attempts.\n" +
+                $"• Difficulty: {difficulty}\n" +
+                $"• Attempts: {(difficulty == Difficulty.Easy ? 10 : difficulty == Difficulty.Medium ? 9 : 8)}\n" +
+                $"• Each wrong guess reduces your remaining attempts.\n\n" +
+                $"Good luck!",
+                "Game Instructions",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+            guessedLetters.Clear();
+            mistakes = 0;
+            labelInfo.Text = $"Mistakes: {mistakes}/{maxMistakes}";
+            inputBox.Text = "";
+            inputBox.Focus();
+            this.ShowDialog();
+        }
     }
 }
