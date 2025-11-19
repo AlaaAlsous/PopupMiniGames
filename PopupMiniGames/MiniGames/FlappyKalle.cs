@@ -31,8 +31,12 @@ namespace MiniGames.MiniGames
             game.Renderer.BackgroundColor = Color.LightSkyBlue;
             form.Controls.Add(game.Renderer);
 
+            PipeSpawner pipeSpawner = new PipeSpawner(Point.Empty, game, this);
+            game.AddGameObject(pipeSpawner);
+            FlappyController player = new FlappyController(new Point(100, 200), game, Path.Combine(assetsPath, "KalleAnkaFace.png"), this);
+            game.AddGameObject(player);
+            game.Start();
 
-            
             form.KeyDown += game.OnKeyDown;
             SetDifficulty(difficulty);
             form.ShowDialog();
