@@ -24,6 +24,7 @@ namespace PopupMiniGames.GameAssets.PolarEngine
             OnUpdate(deltaTime);
         }
         protected virtual void OnUpdate(float deltaTime) { }
+        public virtual void OnKeyDown(KeyEventArgs e) { }
 
 
     }

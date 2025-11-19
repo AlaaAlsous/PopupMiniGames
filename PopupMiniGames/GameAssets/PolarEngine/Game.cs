@@ -48,6 +48,14 @@ namespace PopupMiniGames.GameAssets.PolarEngine
             Renderer.UpdateFrame();
         }
 
+        public void OnKeyDown(object? sender, KeyEventArgs e)
+        {
+            foreach (GameObject obj in GameObjects.ToArray())
+            {
+                obj.OnKeyDown(e);
+            }
+        }
+
         public void AddGameObject(GameObject obj)
         {
             if (obj == null) return;
