@@ -241,4 +241,25 @@ namespace MiniGames.MiniGames
                 }
             }
         }
+                private void EndGame(bool won)
+        {
+            if (gameOver) return;
+            gameOver = true;
+
+            MessageBox.Show(
+                won ? "Correct! You win!" : $"Wrong! Game Over.\nMistakes: {mistakes}/{maxMistakes}",
+                "Find Match Result",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+
+            Cleanup();
+
+            GameEnded?.Invoke(this, new GameResult
+            {
+                Won = won,
+                Points = won ? 1 : 0,
+                Mistakes = mistakes
+            });
+        }
         
