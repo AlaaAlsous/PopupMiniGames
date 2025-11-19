@@ -14,7 +14,9 @@ namespace MiniGames.MiniGames
         private TextBox textBoxAnswer;
         private Button buttonCheck;
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-        public QuickMathGame()
+        private GameData gameData;
+        private GameResult result = new GameResult();
+        public QuickMathGame(GameData data)
         {
             this.Text = "Quick Math Game";
             this.Width = 600;
@@ -49,6 +51,7 @@ namespace MiniGames.MiniGames
             this.Controls.Add(buttonCheck);
             this.Controls.Add(currentDifficultyLabel);
             this.FormClosed += (s, e) => timer.Stop();
+            this.gameData = data;
         }
 
         public void StartGame(Difficulty difficulty)
@@ -185,17 +188,17 @@ namespace MiniGames.MiniGames
                 StartNewQuestion(currentDifficulty);
             }
         }
-
         private void GameOver(bool won)
         {
             timer.Stop();
-            MessageBox.Show(won ? "Congratulations! You won Quick Math Game!" : "Game over! You lost Quick Math Game!");
-            GameEnded?.Invoke(this, new GameResult
+            result = new GameResult
             {
-                Points = score,
-                Mistakes = wrongAnswer,
-                Won = won
-            });
+                Points = won ? 10 : 0,
+                Mistakes = won ? 0 : 5,
+                Won = won,
+                GameName = "Quick Math Game"
+            };
+            GameEnded?.Invoke(this, result);
             this.Close();
         }
 
