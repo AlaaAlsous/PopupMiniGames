@@ -36,7 +36,10 @@ namespace PopupMiniGames.GameAssets.PolarEngine
         {
             float deltaTime = (float)stopwatch.Elapsed.TotalSeconds;
             stopwatch.Restart();
-
+            foreach (GameObject obj in GameObjects)
+            {
+                obj.Update(deltaTime);
+            }
             Renderer.UpdateFrame();
         }
 
