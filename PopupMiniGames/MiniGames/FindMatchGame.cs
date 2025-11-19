@@ -65,3 +65,86 @@ namespace MiniGames.MiniGames
             if (imagePool.Count < 2)
                 MessageBox.Show("Behöver minst 2 bilder för spelet!");
         }
+                public void StartGame(Difficulty difficulty)
+        {
+            this.difficulty = difficulty;
+            roundTimeMs = difficulty switch
+            {
+                Difficulty.Easy => 6000,
+                Difficulty.Medium => 4000,
+                Difficulty.Hard => 2500,
+                _ => 4000
+            };
+            LoadImages();
+            gameOver = false;
+            mistakes = 0;
+            currentRound = 0;
+
+            if (parentContainer == null)
+            {
+                if (Application.OpenForms.Count == 0)
+                    throw new InvalidOperationException("No open forms found.");
+                parentContainer = Application.OpenForms[0]!;
+                Form mainForm = parentContainer as Form;
+                if (mainForm != null)
+                    mainForm.TopMost = true;
+            }
+
+            if (imagePool.Count < 2)
+            {
+                EndGame(false);
+                return;
+            }
+            MessageBox.Show(
+                "Welcome to Find Match!\n\n" +
+                "Your goal: Click the picture at the top among the options below.\n" +
+                $"You have {maxMistakes} mistakes allowed and {roundTimeMs / 1000} seconds per round.\n\n" +
+                "Good luck!",
+                "Find Match Instructions",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+
+            ShowNextRound();
+        }
+        private void ShowNextRound()
+        {
+            Cleanup();
+
+            if (currentRound >= maxRounds)
+            {
+                EndGame(true); 
+                return;
+            }
+
+            currentRound++;
+
+            // Kontroll: finns det bilder?
+            if (imagePool.Count == 0)
+            {
+                MessageBox.Show("Inga bilder finns att spela med!");
+                EndGame(false);
+                return;
+            }
+
+            var target = imagePool[rng.Next(imagePool.Count)];
+
+            targetPicture = new PictureBox
+            {
+                Image = target.img,
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Size = new Size(150, 150),
+                Location = new Point((parentContainer.Width - 150) / 2, 20),
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            parentContainer.Controls.Add(targetPicture);
+
+            roundTimer?.Stop();
+            roundTimer?.Dispose();
+            roundTimer = new System.Windows.Forms.Timer();
+            roundTimer.Interval = roundTimeMs;
+            roundTimer.Tick += RoundTimeElapsed;
+            roundTimer.Start();
+
+            GenerateOptions(target);
+        }
