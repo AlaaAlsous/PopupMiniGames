@@ -38,7 +38,7 @@ namespace MiniGames.MiniGames
             game.Start();
 
             form.KeyDown += game.OnKeyDown;
-            SetDifficulty(difficulty);
+            SetDifficulty(difficulty, pipeSpawner);
             form.ShowDialog();
 
         }
@@ -57,21 +57,26 @@ namespace MiniGames.MiniGames
             }
 
         }
-        private void SetDifficulty(Difficulty difficulty)
+        private void SetDifficulty(Difficulty difficulty, PipeSpawner pipeSpawner)
         {
             switch (difficulty)
-            { 
+            {
                 case Difficulty.Easy:
-
+                    pipeSpawner.TimeBetweenSpawns = 6;
+                    pipeSpawner.Speed = 120;
+                    pipeSpawner.MiddleSpace = 320;
                     break;
                 case Difficulty.Medium:
-
+                    pipeSpawner.TimeBetweenSpawns = 2.6f;
+                    pipeSpawner.Speed = 200;
+                    pipeSpawner.MiddleSpace = 260;
                     break;
                 case Difficulty.Hard:
-
+                    pipeSpawner.TimeBetweenSpawns = 1.8f;
+                    pipeSpawner.Speed = 360;
+                    pipeSpawner.MiddleSpace = 200;
                     break;
             }
-
         }
 
         private void EndGame(bool won)
