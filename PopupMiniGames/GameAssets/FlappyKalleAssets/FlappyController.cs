@@ -15,6 +15,7 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
         private Sprite sprite;
         private Collider collider;
 
+        private int flightStrength = 13;
         public FlappyController(Point position, Game game, string imageFilePath) : base(position, game)
         {
             Position = new Point(100, 300);
@@ -41,6 +42,18 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
 
             sprite.Rotation = Math.Clamp((int)velocity * 3, -50, 50);
         }
+        override public void OnKeyDown(KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Space:
+                    velocity = -flightStrength;
+                    break;
+                case Keys.Escape:
+                    Application.Exit();
+                    break;
+            }
 
+        }
     }
 }
