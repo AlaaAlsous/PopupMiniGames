@@ -64,6 +64,7 @@ namespace MiniGames.MiniGames
                 Location = new Point(260, 220),
                 Size = new Size(130, 39)
             };
+            guessButton.Click += GuessButtonClick;
             currentDifficultyLabel = new Label()
             {
                 Location = new Point(325, 20),
@@ -129,6 +130,42 @@ namespace MiniGames.MiniGames
                 Difficulty.Hard => hardWords[random.Next(hardWords.Count)],
                 _ => mediumWords[random.Next(mediumWords.Count)]
             };
+        }
+        private void GuessButtonClick(object? sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(inputBox.Text)) return;
+            char guess = char.ToUpper(inputBox.Text[0]);
+            inputBox.Clear();
+            if (!char.IsLetter(guess))
+            {
+                MessageBox.Show("Please enter a letter!");
+                return;
+            }
+            if (guessedLetters.Contains(guess))
+            {
+                MessageBox.Show("You already guessed that letter!");
+                return;
+            }
+            guessedLetters.Add(guess);
+
+            if (secretWord.Contains(guess))
+            {
+                if (!labelWord.Text.Contains("_"))
+                {
+                    MessageBox.Show($"Congratulations!\nYou won Hangman Game! The word was ({secretWord})");
+                }
+            }
+            else
+            {
+                mistakes++;
+                MessageBox.Show("Wrong! Try agian!");
+                labelInfo.Text = $"Mistakes: {mistakes}/{maxMistakes}";
+                if (mistakes >= maxMistakes)
+                {
+                    MessageBox.Show($"Game over!\nYou lost Hangman Game! The word was {secretWord}");
+                }
+            }
+            inputBox.Focus();
         }
     }
 }
