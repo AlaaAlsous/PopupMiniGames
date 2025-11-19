@@ -5,6 +5,7 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
 {
     internal class Pipe : GameObject
     {
+        FlappyKalle flappyKalle;
         Collider collider;
         Sprite sprite;
         int speed;
@@ -12,13 +13,14 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
 
         int width;
         int height;
-        public Pipe(Point position, int speed, Game game, int height, int width) : base(position, game)
+        public Pipe(Point position, int speed, Game game, int height, int width, FlappyKalle flappyKalle) : base(position, game)
         {
             preciseX = position.X;
             sprite = new Sprite(this, Point.Empty);
             this.speed = speed;
             this.width = width;
             this.height = height;
+            this.flappyKalle = flappyKalle;
 
             var old = sprite.SpriteImage;
             sprite.SpriteImage = GetBitmap();
@@ -47,6 +49,7 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
 
             if (preciseX < -100)
             {
+                flappyKalle.ChangeScore(1, 0);
                 Game.RemoveGameObject(this);
             }
         }
