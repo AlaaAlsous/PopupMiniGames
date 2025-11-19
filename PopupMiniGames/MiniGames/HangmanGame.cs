@@ -88,6 +88,7 @@ namespace MiniGames.MiniGames
         public void StartGame(Difficulty difficulty)
         {
             currentDifficulty = difficulty;
+            ConfigureDifficulty(difficulty);
             currentDifficultyLabel.Text = $"Difficulty: {difficulty}";
             MessageBox.Show(
                 $"Welcome to Hangman Game!\n\n" +
@@ -106,6 +107,16 @@ namespace MiniGames.MiniGames
             inputBox.Text = "";
             inputBox.Focus();
             this.ShowDialog();
+        }
+        private void ConfigureDifficulty(Difficulty difficulty)
+        {
+            maxMistakes = difficulty switch
+            {
+                Difficulty.Easy => 10,
+                Difficulty.Medium => 9,
+                Difficulty.Hard => 8,
+                _ => 9
+            };
         }
     }
 }
