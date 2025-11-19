@@ -10,7 +10,6 @@ namespace MiniGames
         private List<Type> remainingGames = new List<Type>();
         private Random rand = new Random();
         private GameData gameData = new GameData();
-
         private PictureBox? difficultyIcon;
         private UIManager uiManager;
         private Menu? mainMenu;
@@ -170,7 +169,7 @@ namespace MiniGames
             int index = rand.Next(remainingGames.Count);
             var selectedGame = remainingGames[index];
             remainingGames.RemoveAt(index);
-            var instance = Activator.CreateInstance(selectedGame) as IMiniGame;
+            var instance = Activator.CreateInstance(selectedGame, gameData) as IMiniGame;
             if (instance != null)
             {
                 instance.GameEnded += OnMiniGameEnded!;
@@ -202,7 +201,22 @@ namespace MiniGames
             }
             gameData.Score += e.Points;
             gameData.Mistakes += e.Mistakes;
-
+            if (e.Won)
+            {
+                MessageBox.Show(
+                    $"Well Done!\nYou won {e.GameName}!\n\n" +
+                    $"Your Score: {gameData.Score} - Max Score: {gameData.MaxScore}\n" +
+                    $"Your Mistakes: {gameData.Mistakes} - Max Mistakes: {gameData.MaxMistakes}"
+                );
+            }
+            else
+            {
+                MessageBox.Show(
+                    $"Game over! You lost {e.GameName}!\n\n" +
+                    $"Your Score: {gameData.Score} - Max Score: {gameData.MaxScore}\n" +
+                    $"Your Mistakes: {gameData.Mistakes} - Max Mistakes: {gameData.MaxMistakes}"
+                );
+            }
             this.BackgroundImage = null;
             SetupMenu();
 
