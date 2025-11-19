@@ -44,6 +44,7 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
         }
         protected override void OnUpdate(float deltaTime)
         {
+            if(Game == null) return; //this shouldn't be necessary, but it is
             preciseX -= deltaTime * speed;
             Position = new Point((int)preciseX, Position.Y);
 
