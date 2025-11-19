@@ -4,13 +4,13 @@ using System.IO;
 
 namespace PopupMiniGames.GameAssets.PolarEngine
 {
-    public class Sprite
+    public class Sprite : Component
     {
         public Image SpriteImage { get; set; }
         public Point Position { get; set; }
         public int Rotation { get; set; }
 
-        public Sprite(Point position, string? filePath = null, int rotation = 0)
+        public Sprite(GameObject parentObject, Point position, string? filePath = null, int rotation = 0) : base(parentObject)
         {
             Position = position;
             Rotation = rotation;
@@ -28,6 +28,12 @@ namespace PopupMiniGames.GameAssets.PolarEngine
                 }
                 SpriteImage = bmp;
             }
+        }
+        public Point GetTruePosition()
+        {
+            int x = Position.X + Parent.Position.X;
+            int y = Position.Y + Parent.Position.Y;
+            return new Point(x, y);
         }
     }
 }
