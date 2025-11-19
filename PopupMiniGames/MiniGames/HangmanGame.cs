@@ -64,7 +64,6 @@ namespace MiniGames.MiniGames
                 Location = new Point(260, 220),
                 Size = new Size(130, 39)
             };
-            guessButton.Click += GuessButtonClick;
             currentDifficultyLabel = new Label()
             {
                 Location = new Point(325, 20),
@@ -73,6 +72,7 @@ namespace MiniGames.MiniGames
                 ForeColor = Color.OliveDrab,
                 Text = "Test"
             };
+            guessButton.Click += GuessButtonClick;
             inputBox.KeyDown += (s, e) =>
             {
                 if (e.KeyCode == Keys.Enter)
@@ -86,6 +86,7 @@ namespace MiniGames.MiniGames
             this.Controls.Add(inputBox);
             this.Controls.Add(guessButton);
         }
+
         public void StartGame(Difficulty difficulty)
         {
             currentDifficulty = difficulty;
@@ -105,11 +106,13 @@ namespace MiniGames.MiniGames
             secretWord = PickWord(difficulty);
             guessedLetters.Clear();
             mistakes = 0;
+            labelWord.Text = GetHiddenWord();
             labelInfo.Text = $"Mistakes: {mistakes}/{maxMistakes}";
             inputBox.Text = "";
             inputBox.Focus();
             this.ShowDialog();
         }
+
         private void ConfigureDifficulty(Difficulty difficulty)
         {
             maxMistakes = difficulty switch
@@ -120,6 +123,7 @@ namespace MiniGames.MiniGames
                 _ => 9
             };
         }
+
         private string PickWord(Difficulty difficulty)
         {
             var random = new Random();
@@ -131,6 +135,7 @@ namespace MiniGames.MiniGames
                 _ => mediumWords[random.Next(mediumWords.Count)]
             };
         }
+
         private void GuessButtonClick(object? sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(inputBox.Text)) return;
@@ -150,9 +155,12 @@ namespace MiniGames.MiniGames
 
             if (secretWord.Contains(guess))
             {
+                labelWord.Text = GetHiddenWord();
+
                 if (!labelWord.Text.Contains("_"))
                 {
                     MessageBox.Show($"Congratulations!\nYou won Hangman Game! The word was ({secretWord})");
+                    EndGame(true);
                 }
             }
             else
@@ -163,9 +171,26 @@ namespace MiniGames.MiniGames
                 if (mistakes >= maxMistakes)
                 {
                     MessageBox.Show($"Game over!\nYou lost Hangman Game! The word was {secretWord}");
+                    EndGame(false);
                 }
             }
             inputBox.Focus();
+        }
+
+        private string GetHiddenWord()
+        {
+            return string.Join(" ", secretWord.Select(c => guessedLetters.Contains(c) ? c : '_'));
+        }
+
+        private void EndGame(bool won)
+        {
+            GameEnded?.Invoke(this, new GameResult
+            {
+                Won = won,
+                Points = won ? 10 : 0,
+                Mistakes = won ? 0 : 5
+            });
+            this.Close();
         }
     }
 }
