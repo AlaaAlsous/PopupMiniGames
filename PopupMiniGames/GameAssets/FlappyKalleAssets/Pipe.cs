@@ -7,12 +7,16 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
     {
         Collider collider;
         Sprite sprite;
+        int speed;
+        float preciseX;
 
         int width;
         int height;
-        public Pipe(Point position, Game game, int height, int width) : base(position, game)
+        public Pipe(Point position, int speed, Game game, int height, int width) : base(position, game)
         {
+            preciseX = position.X;
             sprite = new Sprite(this, Point.Empty);
+            this.speed = speed;
             this.width = width;
             this.height = height;
 
@@ -36,6 +40,15 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
             }
             return bitmap;
         }
+        protected override void OnUpdate(float deltaTime)
+        {
+            preciseX -= deltaTime * speed;
+            Position = new Point((int)preciseX, Position.Y);
 
+            if (preciseX < -100)
+            {
+                Game.RemoveGameObject(this);
+            }
+        }
     }
 }
