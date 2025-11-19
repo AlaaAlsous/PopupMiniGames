@@ -148,3 +148,18 @@ namespace MiniGames.MiniGames
 
             GenerateOptions(target);
         }
+                private void RoundTimeElapsed(object? sender, EventArgs e)
+        {
+            roundTimer.Stop();
+            roundTimer.Dispose();
+            roundTimer = null;
+
+            mistakes++;
+
+            if (mistakes >= maxMistakes)
+            {
+                EndGame(false);
+                return;
+            }
+            ShowNextRound();
+        }
