@@ -24,7 +24,7 @@ namespace MiniGames.MiniGames
             form.Width = 1000;
             form.Height = 800;
 
-            MessageBox.Show("Flappy kalle is starting!", "Get Ready", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Flappy kalle is starting! Be ready to jump with space!", "Get Ready", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             game.Renderer.Width = form.Width;
             game.Renderer.Height = form.Height;
@@ -38,7 +38,21 @@ namespace MiniGames.MiniGames
             form.ShowDialog();
 
         }
+        public void ChangeScore(int addedScore, int addedMistakes)
+        {
+            score = Math.Min(score+addedScore, maxScore);
+            mistakes = Math.Min(mistakes+addedMistakes, maxMistakes);
 
+            if (mistakes >= maxMistakes)
+            { 
+                EndGame(false);
+            }
+            if (score >= maxScore)
+            { 
+                EndGame(true);
+            }
+
+        }
         private void SetDifficulty(Difficulty difficulty)
         {
             switch (difficulty)
@@ -56,7 +70,23 @@ namespace MiniGames.MiniGames
 
         }
 
+        private void EndGame(bool won)
+        {
+            game.Stop();
+            form.Close();
+            string resultMessage = won
+                ? $"You won with a score of {score}, with {mistakes} mistakes.!"
+                : $"Game Over! \n You got a score of {score} with {mistakes} mistakes.";
+            MessageBox.Show(resultMessage, "Game Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Cleanup();
+            GameEnded?.Invoke(this, new GameResult
+            {
+                Won = won,
+                Points = score,
+                Mistakes = mistakes
+            });
 
+        }
         public void Cleanup()
         {
             form.KeyDown -= game.OnKeyDown;
