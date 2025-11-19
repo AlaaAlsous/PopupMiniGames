@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace PopupMiniGames.GameAssets.PolarEngine
 {
-    public class Game
+    public class Game : IDisposable
     {
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         private Stopwatch stopwatch = new Stopwatch();
@@ -18,6 +18,8 @@ namespace PopupMiniGames.GameAssets.PolarEngine
 
         private List<GameObject> pendingRemovals = new List<GameObject>();
         private List<GameObject> pendingAdds = new List<GameObject>();
+
+        private bool disposed = false;
 
         public Game() { }
 
@@ -44,7 +46,9 @@ namespace PopupMiniGames.GameAssets.PolarEngine
             {
                 obj.Update(deltaTime);
             }
+
             ApplyPendingChanges();
+
             Renderer.UpdateFrame();
         }
 
@@ -115,10 +119,34 @@ namespace PopupMiniGames.GameAssets.PolarEngine
                         Colliders.Remove(collider);
                         collider.Game = default!;
                     }
+                    if (obj is IDisposable disposableObj) disposableObj.Dispose();
+
                     GameObjects.Remove(obj);
                 }
             }
         }
 
+        public void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+
+            Stop();
+
+            // dispose all managed objects
+            foreach (var obj in GameObjects.ToArray())
+            {
+                if (obj is IDisposable d) d.Dispose();
+            }
+            GameObjects.Clear();
+            Colliders.Clear();
+            pendingAdds.Clear();
+            pendingRemovals.Clear();
+
+            Renderer.Dispose();
+            timer.Dispose();
+            Renderer?.Dispose();
+            Renderer = default!;
+        }
     }
 }
