@@ -74,6 +74,7 @@ namespace MiniGames.MiniGames
                     Image = Image.FromFile(kajsaImage),
                     SizeMode = PictureBoxSizeMode.Zoom,
                 };
+                ResetObstacle(obstacle);
                 obstacles.Add(obstacle);
                 this.Controls.Add(obstacle);
             }
@@ -115,10 +116,12 @@ namespace MiniGames.MiniGames
                 if (kalle.Bounds.IntersectsWith(o.Bounds))
                 {
                     lives--;
+                    ResetObstacle(o);
                 }
                 if (o.Top >= this.ClientSize.Height)
                 {
                     score++;
+                    ResetObstacle(o);
                 }
             }
             livesLabel.Text = $"Lives: {lives}";
@@ -155,6 +158,29 @@ namespace MiniGames.MiniGames
                     kalle.Top = Math.Min(this.ClientSize.Height - kalle.Height, kalle.Top + move);
                     break;
             }
+        }
+
+        private void ResetObstacle(PictureBox o)
+        {
+            int minDistance = 150;
+            bool tooClose;
+            do
+            {
+                tooClose = false;
+                o.Left = random.Next(0, this.ClientSize.Width - o.Width);
+                o.Top = random.Next(-600, -100);
+                foreach (var other in obstacles)
+                {
+                    if (other == o) continue;
+                    int dx = Math.Abs(o.Left - other.Left);
+                    int dy = Math.Abs(o.Top - other.Top);
+                    if (dx < minDistance && dy < minDistance)
+                    {
+                        tooClose = true;
+                        break;
+                    }
+                }
+            } while (tooClose);
         }
     }
 }
