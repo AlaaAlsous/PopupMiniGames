@@ -131,12 +131,14 @@ namespace MiniGames.MiniGames
                 gameEnded = true;
                 timer.Stop();
                 MessageBox.Show("Donald got caught! Better luck next time!");
+                GameOver(true);
             }
             if (score >= maxScore)
             {
                 gameEnded = true;
                 timer.Stop();
                 MessageBox.Show("Donald escaped!");
+                GameOver(true);
             }
         }
 
@@ -181,6 +183,20 @@ namespace MiniGames.MiniGames
                     }
                 }
             } while (tooClose);
+        }
+
+        private void GameOver(bool won)
+        {
+            timer.Stop();
+            result = new GameResult
+            {
+                Points = won ? 10 : 0,
+                Mistakes = won ? 0 : 5,
+                Won = won,
+                GameName = "Kalle Anka Escapes Game",
+            };
+            GameEnded?.Invoke(this, result);
+            this.Close();
         }
     }
 }
