@@ -12,10 +12,10 @@ namespace MiniGames.MiniGames
         public event EventHandler<GameResult>? GameEnded;
         private List<(Image img, string name)> imagePool = new List<(Image img, string name)>();
         private Difficulty difficulty;
-        private System.Windows.Forms.Timer roundTimer;
-        private Control parentContainer;
+        private System.Windows.Forms.Timer? roundTimer;
+        private Control parentContainer = new Panel();
         private Random rng = new Random();
-        private PictureBox targetPicture;
+        private PictureBox targetPicture = new PictureBox();
         private List<PictureBox> optionBoxes = new();
         private int mistakes = 0;
         private int maxMistakes = 3;
@@ -88,9 +88,9 @@ namespace MiniGames.MiniGames
                 if (Application.OpenForms.Count == 0)
                     throw new InvalidOperationException("No open forms found.");
                 parentContainer = Application.OpenForms[0]!;
-                Form mainForm = parentContainer as Form;
-                if (mainForm != null)
-                    mainForm.TopMost = true;
+                Form? mainForm = parentContainer as Form;
+if (mainForm != null)
+    mainForm.TopMost = true;
             }
 
             if (imagePool.Count < 2)
