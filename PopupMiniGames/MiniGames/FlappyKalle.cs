@@ -15,11 +15,15 @@ namespace MiniGames.MiniGames
         private Form form = new Form();
 
         private int mistakes = 0;
-        private int maxMistakes = 10;
-        private int mistakeMultiplier = 1;
+        private int maxMistakes = 4;
         private int score = 0;
-        private int maxScore = 10;
-        private int scoreRatio = 2; //Sets the amount of in game score per actual score(that the mainform takes)
+        private int maxScore = 10; // 2 score per cleared pipe
+        private GameData gameData;
+
+        public FlappyKalle(GameData data)
+        {
+            gameData = data;
+        }
         public void StartGame(Difficulty difficulty)
         {
             form.FormBorderStyle = FormBorderStyle.None;
@@ -65,21 +69,24 @@ namespace MiniGames.MiniGames
             switch (difficulty)
             {
                 case Difficulty.Easy:
-                    scoreRatio = 2;
+                    maxMistakes = 4;
+                    maxScore = 10;
                     pipeSpawner.TimeBetweenSpawns = 6;
                     pipeSpawner.Speed = 120;
                     pipeSpawner.MiddleSpace = 320;
                     mistakeMultiplier = 1;
                     break;
                 case Difficulty.Medium:
-                    scoreRatio = 3;
+                    maxMistakes = 3;
+                    maxScore = 14;
                     pipeSpawner.TimeBetweenSpawns = 2.6f;
                     pipeSpawner.Speed = 200;
                     pipeSpawner.MiddleSpace = 260;
                     mistakeMultiplier = 1;
                     break;
                 case Difficulty.Hard:
-                    scoreRatio = 4;
+                    maxMistakes = 3;
+                    maxScore = 18;
                     pipeSpawner.TimeBetweenSpawns = 1.8f;
                     pipeSpawner.Speed = 360;
                     pipeSpawner.MiddleSpace = 200;
@@ -95,15 +102,16 @@ namespace MiniGames.MiniGames
             form.Close();
             score = score / scoreRatio;
             string resultMessage = won
-                ? $"You won with a score of {score}, with {mistakes} mistakes.!"
-                : $"Game Over! \n You got a score of {score} with {mistakes} mistakes.";
+                ? $"You won!"
+                : $"You lost!";
             MessageBox.Show(resultMessage, "Game Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Cleanup();
             GameEnded?.Invoke(this, new GameResult
             {
                 Won = won,
-                Points = score,
-                Mistakes = mistakes
+                Points = won ? 10 : 0,
+                Mistakes = won ? 0 : 5,
+                GameName = "Flappy Kalle"
             });
 
         }
