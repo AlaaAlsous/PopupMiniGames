@@ -40,16 +40,20 @@ namespace PopupMiniGames.GameAssets.PolarEngine
 
         public void Update(object? sender, EventArgs e)
         {
-            float deltaTime = (float)stopwatch.Elapsed.TotalSeconds;
-            stopwatch.Restart();
-            foreach (GameObject obj in GameObjects)
+            try
             {
-                obj.Update(deltaTime);
+                float deltaTime = (float)stopwatch.Elapsed.TotalSeconds;
+                stopwatch.Restart();
+                foreach (GameObject obj in GameObjects)
+                {
+                    obj.Update(deltaTime);
+                }
+
+                ApplyPendingChanges();
+
+                Renderer.UpdateFrame();
             }
-
-            ApplyPendingChanges();
-
-            Renderer.UpdateFrame();
+            catch { }
         }
 
         public void OnKeyDown(object? sender, KeyEventArgs e)
