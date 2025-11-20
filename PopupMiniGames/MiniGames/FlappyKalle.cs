@@ -98,7 +98,7 @@ namespace MiniGames.MiniGames
                 ? $"You won!"
                 : $"You lost!";
             MessageBox.Show(resultMessage, "Game Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            
+
             GameEnded?.Invoke(this, new GameResult
             {
                 Won = won,
@@ -192,7 +192,11 @@ namespace MiniGames.MiniGames
 
         private int width;
         private int height;
-        public Pipe(Point position, int speed, Game game, int height, int width, FlappyKalle flappyKalle) : base(position, game)
+
+        private bool isDeleted = false; // <-- Fix: så vi inte tar bort två gånger
+
+        public Pipe(Point position, int speed, Game game, int height, int width, FlappyKalle flappyKalle)
+            : base(position, game)
         {
             preciseX = position.X;
             sprite = new Sprite(this, Point.Empty);
@@ -206,12 +210,14 @@ namespace MiniGames.MiniGames
             old?.Dispose();
 
             AddComponent(sprite);
+
             collider = new Collider(this);
             collider.height = height;
             collider.width = width;
             collider.position = new Point(-width / 2, -height / 2);
             AddComponent(collider);
         }
+
         private Bitmap GetBitmap()
         {
             Bitmap bitmap = new Bitmap(width, height);
@@ -221,19 +227,30 @@ namespace MiniGames.MiniGames
             }
             return bitmap;
         }
+
         protected override void OnUpdate(float deltaTime)
         {
-            if (Game == null) return; //this shouldn't be necessary, but it is
+            // Skydda mot null direkt
+            if (Game == null || flappyKalle == null)
+                return;
+
             preciseX -= deltaTime * speed;
             Position = new Point((int)preciseX, Position.Y);
 
             if (preciseX < -100)
             {
                 flappyKalle.ChangeScore(1, 0);
-                Game.RemoveGameObject(this);
+
+                // Kontrollera att objektet fortfarande finns i spelet
+                if (Game.GameObjects.Contains(this))
+                {
+                    Game.RemoveGameObject(this);
+                }
             }
         }
+
     }
+
 
     internal class PipeSpawner : GameObject
     {
