@@ -79,5 +79,30 @@ namespace MiniGames.MiniGames
             this.FormClosed += (s, e) => timer.Stop();
             this.gameData = data;
         }
+
+        public void StartGame(Difficulty difficulty)
+        {
+            currentDifficulty = difficulty;
+            currentDifficultyLabel.Text = $"Difficulty: {difficulty}";
+            switch (difficulty)
+            {
+                case Difficulty.Easy:
+                    speed = 5; lives = 6; maxScore = 20; break;
+                case Difficulty.Medium:
+                    speed = 8; lives = 5; maxScore = 25; break;
+                case Difficulty.Hard:
+                    speed = 10; lives = 4; maxScore = 30; break;
+            }
+
+            MessageBox.Show(
+                $"Help Donald run for his life with the arrow keys!\nWatch out!! Daisy is chasing him!\nLives: {lives}, Speed: {speed}\nGood luck, duck hero!",
+                "Instructions",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+
+            timer.Start();
+            this.ShowDialog();
+        }
     }
 }
