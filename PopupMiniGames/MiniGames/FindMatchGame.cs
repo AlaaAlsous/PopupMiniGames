@@ -15,7 +15,7 @@ namespace MiniGames.MiniGames
         private System.Windows.Forms.Timer? roundTimer;
         private Control parentContainer = new Panel();
         private Random rng = new Random();
-        private PictureBox targetPicture = new PictureBox();
+        private PictureBox? targetPicture;
         private List<PictureBox> optionBoxes = new();
         private int mistakes = 0;
         private int maxMistakes = 3;
@@ -89,8 +89,8 @@ namespace MiniGames.MiniGames
                     throw new InvalidOperationException("No open forms found.");
                 parentContainer = Application.OpenForms[0]!;
                 Form? mainForm = parentContainer as Form;
-if (mainForm != null)
-    mainForm.TopMost = true;
+                if (mainForm != null)
+                    mainForm.TopMost = true;
             }
 
             if (imagePool.Count < 2)
@@ -151,10 +151,10 @@ if (mainForm != null)
 
             GenerateOptions(target);
         }
-                private void RoundTimeElapsed(object? sender, EventArgs e)
+        private void RoundTimeElapsed(object? sender, EventArgs e)
         {
-            roundTimer.Stop();
-            roundTimer.Dispose();
+            roundTimer?.Stop();
+            roundTimer?.Dispose();
             roundTimer = null;
 
             mistakes++;
@@ -166,7 +166,7 @@ if (mainForm != null)
             }
             ShowNextRound();
         }
-                private void GenerateOptions((Image img, string name) target)
+        private void GenerateOptions((Image? img, string name) target)
         {
             int startX = 40;
             int startY = 200;
@@ -185,7 +185,7 @@ if (mainForm != null)
 
             List<(Image img, string name)> options = new List<(Image img, string name)>();
             options.AddRange(wrongImages.Take(totalOptions - 1));
-            options.Add(target); // target finns alltid med
+            options.Add((target.img!, target.name));
             options = options.OrderBy(x => rng.Next()).ToList();
 
             for (int i = 0; i < totalOptions; i++)
@@ -204,22 +204,21 @@ if (mainForm != null)
                 };
 
                 box.Click += OptionClick;
-                parentContainer.Controls.Add(box);
+                parentContainer?.Controls.Add(box);
                 optionBoxes.Add(box);
             }
         }
-                private bool ImagesAreEqual(Image a, Image b)
+        private bool ImagesAreEqual(Image a, Image b)
         {
             if (a == null || b == null) return false;
             return a == b; 
         }
 
-        private void OptionClick(object sender, EventArgs e)
+        private void OptionClick(object? sender, EventArgs e)
         {
             if (gameOver) return;
-
-            PictureBox clicked = sender as PictureBox;
-            bool isCorrect = (bool)clicked.Tag;
+            if (sender is not PictureBox clicked) return;
+            if (clicked.Tag is not bool isCorrect) return;
 
             roundTimer?.Stop();
             roundTimer?.Dispose();
