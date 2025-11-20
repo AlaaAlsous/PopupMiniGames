@@ -5,7 +5,7 @@ using MiniGames;
 
 namespace MiniGames.MiniGames
 {
-    public class GuessNumberGame : Form, IMiniGame, IMiniGameWithCleanup
+    public class GuessNumberGame : Form, IMiniGameWithCleanup
     {
         public event EventHandler<GameResult>? GameEnded;
         private Random random = new Random();
@@ -126,12 +126,13 @@ namespace MiniGames.MiniGames
             labelAttempts.Text = $"Attempts: {attemptsLeft}";
             if (guess == secretNumber)
             {
+                MessageBox.Show($"Correct! The secret number was: ({secretNumber})");
                 GameOver(true);
                 return;
             }
             if (attemptsLeft <= 0)
             {
-                MessageBox.Show($"The number was: ({secretNumber})");
+                MessageBox.Show($"No attempts left. The secret number was: ({secretNumber})");
                 GameOver(false);
                 return;
             }

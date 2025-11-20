@@ -72,7 +72,6 @@ namespace MiniGames.MiniGames
                 Font = new Font("Arial", 12),
                 AutoSize = true,
                 ForeColor = Color.OliveDrab,
-                Text = "Test"
             };
             guessButton.Click += GuessButtonClick;
             inputBox.KeyDown += (s, e) =>

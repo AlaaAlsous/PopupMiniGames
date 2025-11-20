@@ -5,7 +5,7 @@ using MiniGames;
 
 namespace MiniGames.MiniGames
 {
-    public class ClickTheButtonGame : Form, IMiniGame, IMiniGameWithCleanup
+    public class ClickTheButtonGame : Form, IMiniGameWithCleanup
     {
         public event EventHandler<GameResult>? GameEnded;
         private Button clickButton;
@@ -30,7 +30,7 @@ namespace MiniGames.MiniGames
                 Top = 20,
                 Width = 300,
                 Height = 60,
-                ForeColor = Color.Green,
+                ForeColor = Color.OliveDrab,
                 Font = new Font("Arial", 12),
                 Text = $"Difficulty: {currentDifficulty}",
             };
