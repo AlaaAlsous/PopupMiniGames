@@ -131,7 +131,7 @@ namespace MiniGames.MiniGames
                 gameEnded = true;
                 timer.Stop();
                 MessageBox.Show("Donald got caught! Better luck next time!");
-                GameOver(true);
+                GameOver(false);
             }
             if (score >= maxScore)
             {
@@ -161,7 +161,6 @@ namespace MiniGames.MiniGames
                     break;
             }
         }
-
         private void ResetObstacle(PictureBox o)
         {
             int minDistance = 150;
@@ -197,6 +196,21 @@ namespace MiniGames.MiniGames
             };
             GameEnded?.Invoke(this, result);
             this.Close();
+        }
+
+        public void Cleanup()
+        {
+            timer.Stop();
+            timer.Tick -= TimerTick;
+            this.KeyDown -= FormKeyDown;
+
+            foreach (Control c in this.Controls)
+                c.Dispose();
+
+            this.Controls.Clear();
+            this.Hide();
+            this.Close();
+            this.Dispose();
         }
     }
 }
