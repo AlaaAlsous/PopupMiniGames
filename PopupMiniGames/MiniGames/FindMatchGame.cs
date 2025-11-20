@@ -32,7 +32,7 @@ namespace MiniGames.MiniGames
         );
        
 
-        public FindMatchGame(Control parent, GameData data)
+        public FindMatchGame(GameData data)
         {
             parentContainer = Application.OpenForms[0]!;
             this.gameData = data;

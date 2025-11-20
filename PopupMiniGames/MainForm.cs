@@ -158,25 +158,14 @@ namespace MiniGames
                 SetupMenu();
                 return;
             }
-
             if (remainingGames.Count == 0)
+            {
                 remainingGames = new List<Type>(miniGames);
-
+            }
             int index = rand.Next(remainingGames.Count);
             var selectedGame = remainingGames[index];
             remainingGames.RemoveAt(index);
-
-            IMiniGame? instance;
-
-            if (selectedGame == typeof(FindMatchGame))
-            {
-                instance = (IMiniGame)Activator.CreateInstance(selectedGame, this, gameData)!;
-            }
-            else
-            {
-                instance = (IMiniGame)Activator.CreateInstance(selectedGame, gameData)!;
-            }
-
+            var instance = Activator.CreateInstance(selectedGame, gameData) as IMiniGame;
             if (instance != null)
             {
                 instance.GameEnded += OnMiniGameEnded!;
