@@ -44,7 +44,7 @@ namespace PopupMiniGames.GameAssets.PolarEngine
             if (disposed) return;
             disposed = true;
             SpriteImage?.Dispose();
-            SpriteImage = null;
+            SpriteImage = default!;
         }
     }
 }

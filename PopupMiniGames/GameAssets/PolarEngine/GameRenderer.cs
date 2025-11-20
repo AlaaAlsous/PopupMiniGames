@@ -64,7 +64,7 @@ namespace PopupMiniGames.GameAssets.PolarEngine
                 }
 
                 canvas?.Dispose();
-                canvas = null;
+                canvas = default!;
             }
             base.Dispose(disposing);
         }

@@ -40,7 +40,7 @@ namespace PopupMiniGames.GameAssets.PolarEngine
             }
 
             Components.Clear();
-            Game = null;
+            Game = default!;
         }
     }
 }
