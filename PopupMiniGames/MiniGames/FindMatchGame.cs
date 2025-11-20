@@ -34,7 +34,7 @@ namespace MiniGames.MiniGames
 
         public FindMatchGame(Control parent, GameData data)
         {
-            parentContainer = parent;
+            parentContainer = Application.OpenForms[0]!;
             this.gameData = data;
         }
                 private void LoadImages()

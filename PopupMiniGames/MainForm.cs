@@ -136,7 +136,7 @@ namespace MiniGames
 
             if (gameData.Score >= gameData.MaxScore)
             {
-                MessageBox.Show("You Won Popup Mini Gemes!");
+                MessageBox.Show("You Won Popup Mini Games!");
                 gameData.Score = 0;
                 gameData.Mistakes = 0;
                 SetupMenu();
@@ -145,7 +145,7 @@ namespace MiniGames
 
             if (gameData.Mistakes >= gameData.MaxMistakes)
             {
-                MessageBox.Show("Game Over! You lost Popup Mini Gemes!");
+                MessageBox.Show("Game Over! You lost Popup Mini Games!");
                 gameData.Score = 0;
                 gameData.Mistakes = 0;
                 SetupMenu();
@@ -158,14 +158,25 @@ namespace MiniGames
                 SetupMenu();
                 return;
             }
+
             if (remainingGames.Count == 0)
-            {
                 remainingGames = new List<Type>(miniGames);
-            }
+
             int index = rand.Next(remainingGames.Count);
             var selectedGame = remainingGames[index];
             remainingGames.RemoveAt(index);
-            var instance = Activator.CreateInstance(selectedGame, gameData) as IMiniGame;
+
+            IMiniGame? instance;
+
+            if (selectedGame == typeof(FindMatchGame))
+            {
+                instance = (IMiniGame)Activator.CreateInstance(selectedGame, this, gameData)!;
+            }
+            else
+            {
+                instance = (IMiniGame)Activator.CreateInstance(selectedGame, gameData)!;
+            }
+
             if (instance != null)
             {
                 instance.GameEnded += OnMiniGameEnded!;
@@ -177,6 +188,7 @@ namespace MiniGames
                 SetupMenu();
             }
         }
+
         private void LoadMiniGames()
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
