@@ -20,11 +20,14 @@ namespace PopupMiniGames.GameAssets.PolarEngine
         public void AddComponent(Component component) => Components.Add(component);
         public void Update(float deltaTime)
         {
-            foreach (var component in Components)
+            try
             {
-                component.Update(deltaTime);
-            }
-            OnUpdate(deltaTime);
+                foreach (var component in Components)
+                {
+                    component.Update(deltaTime);
+                }
+                OnUpdate(deltaTime);
+            } catch{ }
         }
         protected virtual void OnUpdate(float deltaTime) { }
         public virtual void OnKeyDown(KeyEventArgs e) { }
