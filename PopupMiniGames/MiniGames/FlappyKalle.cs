@@ -193,8 +193,6 @@ namespace MiniGames.MiniGames
         private int width;
         private int height;
 
-        private bool isDeleted = false; // <-- Fix: så vi inte tar bort två gånger
-
         public Pipe(Point position, int speed, Game game, int height, int width, FlappyKalle flappyKalle)
             : base(position, game)
         {
