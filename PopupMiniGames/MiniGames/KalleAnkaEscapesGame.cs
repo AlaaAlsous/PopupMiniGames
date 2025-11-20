@@ -104,5 +104,37 @@ namespace MiniGames.MiniGames
             timer.Start();
             this.ShowDialog();
         }
+        private bool gameEnded = false;
+        private void TimerTick(object? sender, EventArgs e)
+        {
+            if (gameEnded) return;
+            foreach (var o in obstacles)
+            {
+                o.Top += speed;
+                if (kalle.Bounds.IntersectsWith(o.Bounds))
+                {
+                    lives--;
+                }
+                if (o.Top >= this.ClientSize.Height)
+                {
+                    score++;
+                }
+            }
+            livesLabel.Text = $"Lives: {lives}";
+            scoreLabel.Text = $"Score: {score}/{maxScore}";
+
+            if (lives <= 0)
+            {
+                gameEnded = true;
+                timer.Stop();
+                MessageBox.Show("Donald got caught! Better luck next time!");
+            }
+            if (score >= maxScore)
+            {
+                gameEnded = true;
+                timer.Stop();
+                MessageBox.Show("Donald escaped!");
+            }
+        }
     }
 }
