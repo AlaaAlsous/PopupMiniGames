@@ -20,7 +20,13 @@ namespace MiniGames.MiniGames
         private Difficulty currentDifficulty;
         private PictureBox titleImage = null!;
         private bool inputLocked = false;
+        private GameData gameData;
+        private GameResult result = new GameResult();
         private string assetsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\GameAssets");
+        public CupGuessGame(GameData gameData)
+        {
+            this.gameData = gameData;
+        }
 
         public void StartGame(Difficulty difficulty)
         {
@@ -143,13 +149,13 @@ namespace MiniGames.MiniGames
 
                 if (correctGuesses >= 5)
                 {
-                    EndGame(true);
+                    GameOver(true);
                     return;
                 }
 
                 if (wrongGuesses >= 4)
                 {
-                    EndGame(false);
+                    GameOver(false);
                     return;
                 }
                 inputLocked = false;
@@ -158,13 +164,14 @@ namespace MiniGames.MiniGames
             };
             timer.Start();
         }
-        private void EndGame(bool won)
+        private void GameOver(bool won)
         {
             GameEnded?.Invoke(this, new GameResult
             {
                 Won = won,
-                Points = won ? 5 : 0,
-                Mistakes = won ? 0 : 4
+                Points = won ? 10 : 0,
+                Mistakes = won ? 0 : 5,
+                GameName = "CupShuffleGame"
             });
 
             foreach (var c in cups)

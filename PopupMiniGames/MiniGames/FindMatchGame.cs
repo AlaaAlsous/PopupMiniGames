@@ -24,15 +24,18 @@ namespace MiniGames.MiniGames
         private bool gameOver = false;
         private int currentRound = 0;
         private int maxRounds = 5;
+        private GameData? gameData;
+        private GameResult result = new GameResult();
         private string findMatchPath = Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
             @"..\..\..\GameAssets\FindMatchImages"
         );
-        
+       
 
-        public FindMatchGame(Control parent)
+        public FindMatchGame(Control parent, GameData data)
         {
             parentContainer = parent;
+            this.gameData = data;
         }
                 private void LoadImages()
         {
@@ -92,7 +95,7 @@ namespace MiniGames.MiniGames
 
             if (imagePool.Count < 2)
             {
-                EndGame(false);
+                GameOver(false);
                 return;
             }
             MessageBox.Show(
@@ -113,7 +116,7 @@ namespace MiniGames.MiniGames
 
             if (currentRound >= maxRounds)
             {
-                EndGame(true); 
+                GameOver(true); 
                 return;
             }
 
@@ -123,7 +126,7 @@ namespace MiniGames.MiniGames
             if (imagePool.Count == 0)
             {
                 MessageBox.Show("Inga bilder finns att spela med!");
-                EndGame(false);
+                GameOver(false);
                 return;
             }
 
@@ -158,7 +161,7 @@ namespace MiniGames.MiniGames
 
             if (mistakes >= maxMistakes)
             {
-                EndGame(false);
+                GameOver(false);
                 return;
             }
             ShowNextRound();
@@ -233,7 +236,7 @@ namespace MiniGames.MiniGames
 
                 if (mistakes >= maxMistakes)
                 {
-                    EndGame(false);
+                    GameOver(false);
                 }
                 else
                 {
@@ -241,7 +244,7 @@ namespace MiniGames.MiniGames
                 }
             }
         }
-                private void EndGame(bool won)
+                private void GameOver(bool won)
         {
             if (gameOver) return;
             gameOver = true;
@@ -258,8 +261,9 @@ namespace MiniGames.MiniGames
             GameEnded?.Invoke(this, new GameResult
             {
                 Won = won,
-                Points = won ? 1 : 0,
-                Mistakes = mistakes
+                Points = won ? 10 : 0,
+                Mistakes = won ? 0 : 5,
+                GameName = "FindMatchGame"
             });
         }
                 public void Cleanup()

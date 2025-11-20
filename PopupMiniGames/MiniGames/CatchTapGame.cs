@@ -33,7 +33,11 @@ namespace MiniGames.MiniGames
         );
 
         private bool gameOver = false;
-                private int GetPopupInterval(Difficulty difficulty)
+        public CatchTapGame(GameData gameData)
+        {
+            this.gameData = gameData;
+        }
+        private int GetPopupInterval(Difficulty difficulty)
         {
             return difficulty switch
             {
