@@ -14,6 +14,8 @@ namespace MiniGames.MiniGames
         private List<PictureBox> objects = new List<PictureBox>();
         private Random rand = new Random();
         private Difficulty difficulty;
+        private GameData gameData;
+        private GameResult result = new GameResult();
 
         private int score = 0;
         private int mistakes = 0;
@@ -49,6 +51,9 @@ namespace MiniGames.MiniGames
                     throw new InvalidOperationException("No open forms found.");
                 parentContainer = Application.OpenForms[0]!;
             }
+            if (parentContainer is Form f)
+                f.TopMost = true;
+
             MessageBox.Show("CatchTapGame starting! Be ready to tap the popups!", "Get Ready", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.difficulty = difficulty;
 
@@ -79,7 +84,7 @@ namespace MiniGames.MiniGames
             if (gameOver) return;
             if (totalPopups >= maxPopups)
             {
-                EndGame(score >= targetScore);
+                GameOver(score >= targetScore);
                 return;
             }
 
@@ -153,11 +158,11 @@ namespace MiniGames.MiniGames
                     mistakes++;
                     if (mistakes >= maxMistakes)
                     {
-                        EndGame(false);
+                        GameOver(false);
                     }
                     else if (totalPopups >= maxPopups)
                     {
-                        EndGame(score >= targetScore);
+                        GameOver(score >= targetScore);
                     }
                     else
                     {
@@ -208,7 +213,7 @@ namespace MiniGames.MiniGames
 
             if (score >= targetScore)
             {
-                EndGame(true);
+                GameOver(true);
                 return;
             }
 
@@ -228,22 +233,29 @@ namespace MiniGames.MiniGames
 
             if (mistakes >= maxMistakes)
             {
-                EndGame(false);
+                GameOver(false);
                 return;
             }
 
             if (totalPopups >= maxPopups)
             {
-                EndGame(score >= targetScore);
+                GameOver(score >= targetScore);
                 return;
             }
 
             ShowNextObject();
         }  
-        private void EndGame(bool won)
+        private void GameOver(bool won)
         {
             if (gameOver) return;
             gameOver = true;
+            result = new GameResult
+            {
+                Won = won,
+                Points = won ? 10 : 0,
+                Mistakes = won ? 0 : 5,
+                GameName = "CatchTapGame"
+            };
 
             // STOPPA ALLA TIMERS
             lock (activeTimers)
@@ -265,12 +277,7 @@ namespace MiniGames.MiniGames
             MessageBox.Show(resultMessage, "Game Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             Cleanup();
-            GameEnded?.Invoke(this, new GameResult
-            {
-                Won = won,
-                Points = score,
-                Mistakes = mistakes
-            });
+            GameEnded?.Invoke(this, result);
         }  
         public void Cleanup()
         {
