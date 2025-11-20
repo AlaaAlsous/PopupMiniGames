@@ -161,6 +161,7 @@ namespace MiniGames.MiniGames
 
                 if (!labelWord.Text.Contains("_"))
                 {
+                    MessageBox.Show($"The word was ({secretWord})");
                     GameOver(true);
                 }
             }
