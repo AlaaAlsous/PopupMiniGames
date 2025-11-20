@@ -11,8 +11,8 @@ namespace MiniGames.MiniGames
             @"..\..\..\GameAssets\FlappyKalleAssets"
         );
 
-        Game game = new Game();
-        Form form = new Form();
+        private Game game = new Game();
+        private Form form = new Form();
 
         private int mistakes = 0;
         private int maxMistakes = 10;

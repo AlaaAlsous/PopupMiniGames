@@ -6,14 +6,12 @@ namespace PopupMiniGames.UI
 {
     internal class Menu
     {
-        private readonly List<MenuButton> menuButtons = new ();
-        public int CurrentSelection { get; private set; } = 0;
+        private readonly List<MenuButton> menuButtons = new();
         private readonly Form parentForm;
-        public Action onBack = () => { };
-        public List<MenuButton> Buttons => menuButtons;
-
+        private List<MenuButton> buttons => menuButtons;
+        public Action OnBack { get; set; } = () => { };
+        public int CurrentSelection { get; private set; } = 0;
         public Menu(Form parentForm) => this.parentForm = parentForm;
-
         public void AddMenuButton(MenuButton button)
         {
             menuButtons.Add(button);
@@ -53,7 +51,7 @@ namespace PopupMiniGames.UI
                     break;
 
                 case Keys.Escape:
-                    onBack.Invoke();
+                    OnBack.Invoke();
                     break;
             }
         }
@@ -66,6 +64,14 @@ namespace PopupMiniGames.UI
                     menuButtons[i].SetSelectedState();
                 else
                     menuButtons[i].SetNormalState();
+            }
+        }
+        public void ClearButtons(Form form)
+        {
+            foreach (var btn in buttons)
+            {
+                form.Controls.Remove(btn);
+                btn.Dispose();
             }
         }
         public void ShowMenu() => menuButtons.ForEach(b => b.Visible = true);

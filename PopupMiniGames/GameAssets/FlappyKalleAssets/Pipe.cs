@@ -5,14 +5,14 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
 {
     internal class Pipe : GameObject
     {
-        FlappyKalle flappyKalle;
-        Collider collider;
-        Sprite sprite;
-        int speed;
-        float preciseX;
+        private FlappyKalle flappyKalle;
+        private Collider collider;
+        private Sprite sprite;
+        private int speed;
+        private float preciseX;
 
-        int width;
-        int height;
+        private int width;
+        private int height;
         public Pipe(Point position, int speed, Game game, int height, int width, FlappyKalle flappyKalle) : base(position, game)
         {
             preciseX = position.X;
@@ -44,7 +44,7 @@ namespace PopupMiniGames.GameAssets.FlappyKalleAssets
         }
         protected override void OnUpdate(float deltaTime)
         {
-            if(Game == null) return; //this shouldn't be necessary, but it is
+            if (Game == null) return; //this shouldn't be necessary, but it is
             preciseX -= deltaTime * speed;
             Position = new Point((int)preciseX, Position.Y);
 

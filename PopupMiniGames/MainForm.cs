@@ -38,12 +38,12 @@ namespace MiniGames
             mainMenu.AddMenuButton(new MenuButton("OPTIONS.png", "OPTIONSPRESS.png", new Point(310, 200), ShowOptions, basePath));
             mainMenu.AddMenuButton(new MenuButton("EXIT.png", "EXITPRESS.png", new Point(310, 300), () => Application.Exit(), basePath));
             this.KeyDown += mainMenu.OnKeyDown!;
-            mainMenu.onBack += Application.Exit;
+            mainMenu.OnBack += Application.Exit;
 
-            currentDifficultyIcon();
+            CurrentDifficultyIcon();
         }
 
-        private void currentDifficultyIcon()
+        private void CurrentDifficultyIcon()
         {
             if (difficultyIcon != null)
             {
@@ -93,24 +93,24 @@ namespace MiniGames
             Menu optionsMenu = new Menu(optionsForm);
             optionsForm.KeyPreview = true;
             optionsForm.KeyDown += optionsMenu.OnKeyDown!;
-            optionsMenu.onBack += optionsForm.Close;
+            optionsMenu.OnBack += optionsForm.Close;
 
             optionsMenu.AddMenuButton(new MenuButton("EASY.png", "EASYPRESS.png", new Point(310, 100), () =>
             {
                 gameData.SetDifficulty(Difficulty.Easy);
-                currentDifficultyIcon();
+                CurrentDifficultyIcon();
                 optionsForm.Close();
             }, basePath));
             optionsMenu.AddMenuButton(new MenuButton("MEDIUM.png", "MEDIUMPRESS.png", new Point(310, 200), () =>
             {
                 gameData.SetDifficulty(Difficulty.Medium);
-                currentDifficultyIcon();
+                CurrentDifficultyIcon();
                 optionsForm.Close();
             }, basePath));
             optionsMenu.AddMenuButton(new MenuButton("HARD.png", "HARDPRESS.png", new Point(310, 300), () =>
             {
                 gameData.SetDifficulty(Difficulty.Hard);
-                currentDifficultyIcon();
+                CurrentDifficultyIcon();
                 optionsForm.Close();
             }, basePath));
 
@@ -121,11 +121,7 @@ namespace MiniGames
         {
             if (mainMenu != null)
             {
-                foreach (var btn in mainMenu.Buttons)
-                {
-                    this.Controls.Remove(btn);
-                    btn.Dispose();
-                }
+                mainMenu.ClearButtons(this);
                 mainMenu = null;
             }
 
