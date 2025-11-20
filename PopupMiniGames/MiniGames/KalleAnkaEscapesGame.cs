@@ -60,6 +60,7 @@ namespace MiniGames.MiniGames
             };
             timer = new System.Windows.Forms.Timer();
             timer.Interval = 30;
+            timer.Tick += TimerTick;
             this.Controls.Add(currentDifficultyLabel);
             this.Controls.Add(scoreLabel);
             this.Controls.Add(livesLabel);
@@ -76,6 +77,7 @@ namespace MiniGames.MiniGames
                 obstacles.Add(obstacle);
                 this.Controls.Add(obstacle);
             }
+            this.KeyDown += FormKeyDown;
             this.FormClosed += (s, e) => timer.Stop();
             this.gameData = data;
         }
@@ -93,17 +95,16 @@ namespace MiniGames.MiniGames
                 case Difficulty.Hard:
                     speed = 10; lives = 4; maxScore = 30; break;
             }
-
             MessageBox.Show(
                 $"Help Donald run for his life with the arrow keys!\nWatch out!! Daisy is chasing him!\nLives: {lives}, Speed: {speed}\nGood luck, duck hero!",
                 "Instructions",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information
             );
-
             timer.Start();
             this.ShowDialog();
         }
+
         private bool gameEnded = false;
         private void TimerTick(object? sender, EventArgs e)
         {
@@ -122,7 +123,6 @@ namespace MiniGames.MiniGames
             }
             livesLabel.Text = $"Lives: {lives}";
             scoreLabel.Text = $"Score: {score}/{maxScore}";
-
             if (lives <= 0)
             {
                 gameEnded = true;
@@ -134,6 +134,26 @@ namespace MiniGames.MiniGames
                 gameEnded = true;
                 timer.Stop();
                 MessageBox.Show("Donald escaped!");
+            }
+        }
+
+        private void FormKeyDown(object? sender, KeyEventArgs e)
+        {
+            int move = 10;
+            switch (e.KeyCode)
+            {
+                case Keys.Left:
+                    kalle.Left = Math.Max(0, kalle.Left - move);
+                    break;
+                case Keys.Right:
+                    kalle.Left = Math.Min(this.ClientSize.Width - kalle.Width, kalle.Left + move);
+                    break;
+                case Keys.Up:
+                    kalle.Top = Math.Max(0, kalle.Top - move);
+                    break;
+                case Keys.Down:
+                    kalle.Top = Math.Min(this.ClientSize.Height - kalle.Height, kalle.Top + move);
+                    break;
             }
         }
     }
