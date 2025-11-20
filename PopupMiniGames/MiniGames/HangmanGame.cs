@@ -161,6 +161,7 @@ namespace MiniGames.MiniGames
 
                 if (!labelWord.Text.Contains("_"))
                 {
+                    MessageBox.Show($"Correct! The word was ({secretWord})");
                     GameOver(true);
                 }
             }
@@ -171,7 +172,7 @@ namespace MiniGames.MiniGames
                 labelInfo.Text = $"Mistakes: {mistakes}/{maxMistakes}";
                 if (mistakes >= maxMistakes)
                 {
-                    MessageBox.Show($"The word was ({secretWord})");
+                    MessageBox.Show($"No attempts left! The word was ({secretWord})");
                     GameOver(false);
                 }
             }
