@@ -147,7 +147,22 @@ namespace MiniGames.MiniGames
                 }
             }
         }
+        public override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+            {
+                int realPointerLocation = (int)pointerRotation - 90;
+                realPointerLocation = realPointerLocation % 360;
+                if ((realPointerLocation >= startAngle && realPointerLocation <= startAngle + size) ||
+                    (realPointerLocation >= (startAngle + size) % 360 - size && realPointerLocation <= (startAngle + size) % 360))
+                {
+                    //TODO: create new skillcheck
+                    skillCheckGame.ChangeScore(1, 0);
+                }
+                else skillCheckGame.ChangeScore(0, 1);
+            }
 
+        }
         protected override void OnUpdate(float deltaTime)
         {
             pointerRotation += speed * deltaTime;
