@@ -111,21 +111,27 @@ namespace MiniGames.MiniGames
 
     internal class SkillCheckObject : GameObject
     {
+        private float speed;
         private int size;
         private int startAngle;
         private Sprite skillCheckSprite;
-
+        private Sprite pointerSprite;
+        private float pointerRotation = 0;
         private SkillCheckGame skillCheckGame;
 
-        public SkillCheckObject(Point position, Game game, int size, int startAngle, SkillCheckGame skillCheckGame) : base(position, game)
+        public SkillCheckObject(Point position, Game game, float speed, int size, int startAngle, string pointerFilePath, SkillCheckGame skillCheckGame) : base(position, game)
         {
             this.skillCheckGame = skillCheckGame;
             this.size = size;
+            this.speed = speed;
             this.startAngle = startAngle;
 
             skillCheckSprite = new Sprite(this, new Point(0, 0), null);
             UpdateSkillCheckSprite();
             AddComponent(skillCheckSprite);
+
+            pointerSprite = new Sprite(this, Point.Empty, pointerFilePath);
+            AddComponent(pointerSprite);
 
         }
 
@@ -141,6 +147,12 @@ namespace MiniGames.MiniGames
                 }
             }
         }
-        
+
+        protected override void OnUpdate(float deltaTime)
+        {
+            pointerRotation += speed * deltaTime;
+            pointerSprite.Rotation = (int)pointerRotation;
+        }
+
     }
 }
