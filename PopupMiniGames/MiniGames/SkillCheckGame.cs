@@ -75,13 +75,19 @@ namespace MiniGames.MiniGames
             switch (difficulty)
             {
                 case Difficulty.Easy:
-
+                    size = 50;
+                    maxMistakes = 5;
+                    speed = 150;
                     break;
                 case Difficulty.Medium:
-
+                    size = 40;
+                    maxMistakes = 4;
+                    speed = 200;
                     break;
                 case Difficulty.Hard:
-
+                    size = 25;
+                    maxMistakes = 3;
+                    speed = 300;
                     break;
             }
         }
