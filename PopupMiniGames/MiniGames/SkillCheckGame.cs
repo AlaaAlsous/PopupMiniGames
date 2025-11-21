@@ -117,6 +117,9 @@ namespace MiniGames.MiniGames
         private Sprite skillCheckSprite;
         private Sprite pointerSprite;
         private float pointerRotation = 0;
+        private int minSpace = 90;
+        private int maxSpace = 150;
+        private Random random = new Random();
         private SkillCheckGame skillCheckGame;
 
         public SkillCheckObject(Point position, Game game, float speed, int size, int startAngle, string pointerFilePath, SkillCheckGame skillCheckGame) : base(position, game)
@@ -132,7 +135,6 @@ namespace MiniGames.MiniGames
 
             pointerSprite = new Sprite(this, Point.Empty, pointerFilePath);
             AddComponent(pointerSprite);
-
         }
 
         private void UpdateSkillCheckSprite()
@@ -156,18 +158,24 @@ namespace MiniGames.MiniGames
                 if ((realPointerLocation >= startAngle && realPointerLocation <= startAngle + size) ||
                     (realPointerLocation >= (startAngle + size) % 360 - size && realPointerLocation <= (startAngle + size) % 360))
                 {
-                    //TODO: create new skillcheck
+                    SpawnNewSkilCheck();
                     skillCheckGame.ChangeScore(1, 0);
                 }
                 else skillCheckGame.ChangeScore(0, 1);
             }
 
         }
+        private void SpawnNewSkilCheck()
+        {
+            int spawnLocation = (int)pointerRotation - 90 + minSpace + random.Next(maxSpace);
+            startAngle = spawnLocation % 360;
+
+            UpdateSkillCheckSprite();
+        }
         protected override void OnUpdate(float deltaTime)
         {
             pointerRotation += speed * deltaTime;
             pointerSprite.Rotation = (int)pointerRotation;
         }
-
     }
 }
