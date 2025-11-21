@@ -107,4 +107,40 @@ namespace MiniGames.MiniGames
 
     }
 
+
+
+    internal class SkillCheckObject : GameObject
+    {
+        private int size;
+        private int startAngle;
+        private Sprite skillCheckSprite;
+
+        private SkillCheckGame skillCheckGame;
+
+        public SkillCheckObject(Point position, Game game, int size, int startAngle, SkillCheckGame skillCheckGame) : base(position, game)
+        {
+            this.skillCheckGame = skillCheckGame;
+            this.size = size;
+            this.startAngle = startAngle;
+
+            skillCheckSprite = new Sprite(this, new Point(0, 0), null);
+            UpdateSkillCheckSprite();
+            AddComponent(skillCheckSprite);
+
+        }
+
+        private void UpdateSkillCheckSprite()
+        {
+            using (Graphics g = Graphics.FromImage(skillCheckSprite.SpriteImage))
+            {
+                g.Clear(Color.Transparent);
+                Rectangle rect = new Rectangle(25, 25, 450, 450);
+                using (Pen pen = new Pen(Color.White, 25))
+                {
+                    g.DrawArc(pen, rect, startAngle, size);
+                }
+            }
+        }
+        
+    }
 }
