@@ -3,6 +3,7 @@ using MiniGames.MiniGames;
 using PopupMiniGames.GameAssets.PolarEngine;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,8 @@ namespace MiniGames.MiniGames
         private int maxScore = 10;
         private GameData gameData;
 
+        private float speed;
+        private int size;
         public SkillCheckGame(GameData gameData)
         {
             this.gameData = gameData;
@@ -44,10 +47,13 @@ namespace MiniGames.MiniGames
             this.Controls.Add(game.Renderer);
             SetDifficulty(difficulty);
 
-           
+            SkillCheckObject skillCheckObject = new SkillCheckObject(new Point(250, 250), game, speed, size, 0, Path.Combine(assetsPath, "SkillCheckPointer.png"), this);
+            game.AddGameObject(skillCheckObject);
             game.Start();
             this.KeyDown += game.OnKeyDown;
+
             this.ShowDialog();
+
         }
         public void ChangeScore(int addedScore, int addedMistakes)
         {
