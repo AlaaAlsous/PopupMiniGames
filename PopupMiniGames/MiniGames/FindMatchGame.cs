@@ -20,7 +20,7 @@ namespace MiniGames.MiniGames
         private int mistakes = 0;
         private int maxMistakes = 3;
         private int roundTimeMs = 5000;
-        private int totalOptions = 20; // antal små bilder
+        private int totalOptions = 14; // antal små bilder
         private bool gameOver = false;
         private int currentRound = 0;
         private int maxRounds = 5;
@@ -171,7 +171,7 @@ namespace MiniGames.MiniGames
             int startX = 40;
             int startY = 200;
             int spacing = 110;
-            int imagesPerRow = 10;
+            int imagesPerRow = 7; // max 7 annars förs
 
             List<(Image img, string name)> wrongImages = imagePool.Where(x => x.name != target.name).ToList();
 
