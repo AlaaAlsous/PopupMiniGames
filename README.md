@@ -13,3 +13,14 @@ När ett minispel körs visas det i ett eget fönster och kör sin egen logik �
 Programmet har också stöd för resursstädning genom interfacet IMiniGameWithCleanup. Det gör att minispel som använder timers, event-händelser eller dynamiskt skapade resurser kan avslutas och rensas korrekt, vilket förhindrar frysningar och minnesläckor.
 
 Applikationen är utvecklad för att köras i Visual Studio och använder standardfunktioner i .NET Windows Forms, kombinerat med egen UI-hantering genom klasser som UIManager, Menu och MenuButton. Detta ger en flexibel struktur där både layout och logik är tydligt uppdelade.
+
+
+Hur man lägger till ett nytt minispel
+Skapa en ny klass i MiniGames-namnrymden.
+Implementera IMiniGame (och IMiniGameWithCleanup när resurser måste frigöras explicit).
+
+Viktiga krav för ett minispel
+Public konstruktor som tar GameData som parameter, t.ex.: public MyGame(GameData data)
+Implementera void StartGame(Difficulty difficulty) för att starta spelet.
+Raise eventet GameEnded när spelet är klart med relevant GameResult.
+Om spelet skapar timers, bilder eller andra resurser, implementera Cleanup() i IMiniGameWithCleanup och ta bort events/timers/bilder där.
