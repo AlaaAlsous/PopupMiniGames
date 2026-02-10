@@ -1,6 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/TyBvFPPq)
-# .net25-oop-group
-
 # PopupMiniGames
 
 ## Beskrivning
@@ -20,19 +17,21 @@ Applikationen är utvecklad för att köras i Visual Studio och använder standa
 ### Huvudmeny
 
 Huvudmenyn innehåller:
-* Play – Startar ett slumpmässigt minispel
-* Options – Öppnar inställningsmenyn
-* Exit – Stänger applikationen
-* Längst ned visas alltid den aktuella svårighetsgraden.
+
+- Play – Startar ett slumpmässigt minispel
+- Options – Öppnar inställningsmenyn
+- Exit – Stänger applikationen
+- Längst ned visas alltid den aktuella svårighetsgraden.
 
 <img src="PopupMiniGames/UIAssets/Huvudmeny.png" width="200" height="auto">
 
 ### Optionsmeny
 
 Optionsmenyn låter spelaren välja svårighetsgrad:
-* Easy
-* Medium
-* Hard
+
+- Easy
+- Medium
+- Hard
 
 När spelaren väljer en svårighetsgrad uppdateras den direkt och visas sedan på huvudmenyn.
 
@@ -80,9 +79,11 @@ När spelaren väljer en svårighetsgrad uppdateras den direkt och visas sedan p
 ---
 
 ## Så här kör du programmet:
+
 ```bash
 dotnet run
 ```
+
 ### Vad användaren gör efter att programmet startar
 
 **Huvudmenyn**
@@ -91,30 +92,30 @@ Användaren ser tre alternativ: Play, Options och Exit, samt aktuell svårighets
 
 **Styrning**
 
-* Mus: Klicka på alternativ
-* Tangentbord: 
-    * W / S – Flytta mellan menyval
-    * Enter – Välj markerat alternativ
-    * Esc – Stänger hela programmet
+- Mus: Klicka på alternativ
+- Tangentbord:
+  - W / S – Flytta mellan menyval
+  - Enter – Välj markerat alternativ
+  - Esc – Stänger hela programmet
 
 **Starta ett spel**
 
-* Klicka på Play eller tryck Enter för att starta ett slumpmässigt minispel.
-* Följ spelets instruktioner (t.ex. klicka, skriv svar, undvik hinder).
-* Spelet visar poäng och antal misstag under spelets gång.
-* Resultat efter spelet
-* När spelet avslutas visas:
-    * Poäng från spelet
-    * Om du vann eller förlorade
-    * Totalt antal vinster och förluster hittills
-* När du når max antal vinster eller förluster får du veta om du har vunnit eller förlorat i PopupMiniGames, och återvänder därefter automatiskt till huvudmenyn.
+- Klicka på Play eller tryck Enter för att starta ett slumpmässigt minispel.
+- Följ spelets instruktioner (t.ex. klicka, skriv svar, undvik hinder).
+- Spelet visar poäng och antal misstag under spelets gång.
+- Resultat efter spelet
+- När spelet avslutas visas:
+  - Poäng från spelet
+  - Om du vann eller förlorade
+  - Totalt antal vinster och förluster hittills
+- När du når max antal vinster eller förluster får du veta om du har vunnit eller förlorat i PopupMiniGames, och återvänder därefter automatiskt till huvudmenyn.
 
 **Ändra svårighetsgrad**
 
-* Klicka på Options eller välj med Enter.
-* Välj mellan Easy, Medium eller Hard.
-* Ändringen uppdateras direkt och visas på huvudmenyn.
-* Esc – Gå tillbaka till huvudmenyn.
+- Klicka på Options eller välj med Enter.
+- Välj mellan Easy, Medium eller Hard.
+- Ändringen uppdateras direkt och visas på huvudmenyn.
+- Esc – Gå tillbaka till huvudmenyn.
 
 **Avsluta programmet**
 
@@ -127,4 +128,4 @@ Klicka på Exit eller välj med Enter för att stänga applikationen.
 **Alaa Alsous**,**Ida Lindström** och **Sebastian Johansson**  
 Språk: C#  
 Plattform: .NET 8 / Windows Forms  
-Verktyg: Visual Studio, VS code  
+Verktyg: Visual Studio, VS code

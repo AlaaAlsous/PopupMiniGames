@@ -398,6 +398,21 @@ FodyWeavers.xsd
 
 # VS Code files for those working on multiple tools
 .vscode/*
+
+# Project-specific: ignore build outputs for nested project(s)
+PopupMiniGames/PopupMiniGames/bin/
+PopupMiniGames/PopupMiniGames/obj/
+PopupMiniGames/PopupMiniGames/**/bin/
+PopupMiniGames/PopupMiniGames/**/obj/
+
+# Keep assets and UI images tracked
+!PopupMiniGames/PopupMiniGames/GameAssets/**
+!PopupMiniGames/PopupMiniGames/UIAssets/**
+
+# Ignore local runtime configs and debug outputs under build folders
+**/bin/**/*.runtimeconfig.json
+**/bin/**/*.deps.json
+**/bin/**/ref/**
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
