@@ -1,5 +1,10 @@
 # PopupMiniGames
 
+![C#](https://img.shields.io/badge/C%23-239120?logo=csharp&logoColor=white)
+![.NET](https://img.shields.io/badge/.NET-9-512BD4?logo=dotnet&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows-Forms-0078D6?logo=windows&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
+
 ## Beskrivning
 
 PopupMiniGames är en Windows Forms-baserad applikation som samlar flera minispel i ett gemensamt gränssnitt. Programmet är uppbyggt kring en huvudmeny som laddar grafiska resurser från projektets UI-mapp och visar dem med pixelinspirerad design. Menyn fungerar som navet för applikationen och ger användaren möjlighet att starta spel, ändra svårighetsnivå och avsluta programmet.
@@ -13,6 +18,78 @@ När ett minispel körs visas det i ett eget fönster och kör sin egen logik �
 Programmet har också stöd för resursstädning genom interfacet IMiniGameWithCleanup. Det gör att minispel som använder timers, event-händelser eller dynamiskt skapade resurser kan avslutas och rensas korrekt, vilket förhindrar frysningar och minnesläckor.
 
 Applikationen är utvecklad för att köras i Visual Studio och använder standardfunktioner i .NET Windows Forms, kombinerat med egen UI-hantering genom klasser som UIManager, Menu och MenuButton. Detta ger en flexibel struktur där både layout och logik är tydligt uppdelade.
+
+### Krav och förutsättningar
+
+- Windows (WinForms)
+- .NET SDK 9 (Target Framework: net9.0-windows)
+- Visual Studio eller VS Code med C#-stöd
+
+---
+
+## Projektstruktur
+
+```text
+PopupMiniGames/
+├─ PopupMiniGames.sln
+├─ README.md
+├─ OOAD/
+│  ├─ OOA.md
+│  ├─ OOD.md
+│  └─ OOP.md
+└─ PopupMiniGames/
+  ├─ PopupMiniGames.csproj
+  ├─ Program.cs
+  ├─ MainForm.cs
+  ├─ Difficulty.cs
+  ├─ GameData.cs
+  ├─ UI/
+  │  ├─ UIManager.cs
+  │  ├─ Menu.cs
+  │  └─ MenuButton.cs
+  ├─ UIAssets/
+  ├─ GameAssets/
+  │  ├─ PolarEngine/
+  │  │  ├─ Game.cs
+  │  │  ├─ GameObject.cs
+  │  │  ├─ Component.cs
+  │  │  ├─ Collider.cs
+  │  │  ├─ GameRenderer.cs
+  │  │  └─ Sprite.cs
+  │  ├─ FindMatchImages/
+  │  ├─ FlappyKalleAssets/
+  │  └─ SkillCheckAssets/
+  ├─ MiniGames/
+  │  ├─ IMiniGames.cs
+  │  ├─ IMiniGameWithCleanup.cs
+  │  ├─ CatchTapGame.cs
+  │  ├─ ClickTheButtonGame.cs
+  │  ├─ CupShuffleGame.cs
+  │  ├─ FindMatchGame.cs
+  │  ├─ FlappyKalle.cs
+  │  ├─ GuessNumberGame.cs
+  │  ├─ HangmanGame.cs
+  │  ├─ KalleAnkaEscapesGame.cs
+  │  ├─ QuickMathGame.cs
+  │  └─ SkillCheckGame.cs
+  ├─ bin/   (byggutdata)
+  └─ obj/   (mellanbuild)
+```
+
+## English Summary
+
+PopupMiniGames is a Windows Forms app that bundles multiple mini games behind a simple pixel-inspired menu UI. Each game implements a common `IMiniGame` interface, while shared state such as score and difficulty is handled via `GameData`. Run it with:
+
+```bash
+cd PopupMiniGames
+dotnet run
+```
+
+Or build:
+
+```bash
+dotnet build PopupMiniGames/PopupMiniGames.csproj
+```
 
 ### Huvudmeny
 
@@ -35,7 +112,7 @@ Optionsmenyn låter spelaren välja svårighetsgrad:
 
 När spelaren väljer en svårighetsgrad uppdateras den direkt och visas sedan på huvudmenyn.
 
-<img src="PopupMiniGames\UIAssets\Optionsmeny.png" width="200" height="auto">
+<img src="PopupMiniGames/UIAssets/Optionsmeny.png" width="200" height="auto">
 
 ---
 
@@ -81,7 +158,16 @@ När spelaren väljer en svårighetsgrad uppdateras den direkt och visas sedan p
 ## Så här kör du programmet:
 
 ```bash
+cd PopupMiniGames
 dotnet run
+```
+
+Alternativt via Visual Studio: öppna lösningen och tryck F5.
+
+Bygga utan att köra:
+
+```bash
+dotnet build PopupMiniGames/PopupMiniGames.csproj
 ```
 
 ### Vad användaren gör efter att programmet startar
@@ -123,9 +209,30 @@ Klicka på Exit eller välj med Enter för att stänga applikationen.
 
 ---
 
+## Inkluderade minispel
+
+Följande minispel finns i projektet (katalogen PopupMiniGames/MiniGames):
+
+- CatchTapGame
+- ClickTheButtonGame
+- CupShuffleGame
+- FindMatchGame
+- FlappyKalle
+- GuessNumberGame
+- HangmanGame
+- KalleAnkaEscapesGame
+- QuickMathGame
+- SkillCheckGame
+
+Alla minispel implementerar `IMiniGame`, och vissa även `IMiniGameWithCleanup` när resurser behöver städas.
+
+## Licens
+
+Detta projekt använder MIT-licensen. Se [LICENSE](LICENSE).
+
 ## Utvecklare
 
 **Alaa Alsous**,**Ida Lindström** och **Sebastian Johansson**  
 Språk: C#  
-Plattform: .NET 8 / Windows Forms  
+Plattform: .NET 9 / Windows Forms  
 Verktyg: Visual Studio, VS code
