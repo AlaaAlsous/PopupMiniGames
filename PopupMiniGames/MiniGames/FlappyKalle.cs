@@ -7,7 +7,7 @@ namespace MiniGames.MiniGames
         public event EventHandler<GameResult>? GameEnded;
         private string assetsPath = Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
-            @"..\..\..\GameAssets\FlappyKalleAssets"
+            "GameAssets", "FlappyKalleAssets"
         );
 
         private Game game = new Game();

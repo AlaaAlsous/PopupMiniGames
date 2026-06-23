@@ -21,7 +21,7 @@ namespace MiniGames
             this.KeyPreview = true;
             gameData.SetDifficulty(Difficulty.Medium);
 
-            string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
+            string basePath = Path.Combine(Application.StartupPath, "UIAssets");
             uiManager = new UIManager(this, basePath);
 
             SetupMenu();
@@ -32,7 +32,7 @@ namespace MiniGames
         {
             uiManager.SetBackground("MENU_BG.png");
 
-            string basePath = Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
+            string basePath = Path.Combine(Application.StartupPath, "UIAssets");
             mainMenu = new Menu(this);
             mainMenu.AddMenuButton(new MenuButton("PLAY.png", "PLAYPRESS.png", new Point(310, 100), StartNextGame, basePath));
             mainMenu.AddMenuButton(new MenuButton("OPTIONS.png", "OPTIONSPRESS.png", new Point(310, 200), ShowOptions, basePath));
@@ -67,7 +67,7 @@ namespace MiniGames
                 _ => "SL_EASY.png"
             };
 
-            string path = System.IO.Path.Combine(Application.StartupPath, @"..\..\..\UIAssets", img);
+            string path = System.IO.Path.Combine(Application.StartupPath, "UIAssets", img);
             difficultyIcon.Image = Image.FromFile(path);
 
             this.Controls.Add(difficultyIcon);
@@ -89,7 +89,7 @@ namespace MiniGames
                 Owner = this
             };
 
-            string basePath = System.IO.Path.Combine(Application.StartupPath, @"..\..\..\UIAssets");
+            string basePath = System.IO.Path.Combine(Application.StartupPath, "UIAssets");
             Menu optionsMenu = new Menu(optionsForm);
             optionsForm.KeyPreview = true;
             optionsForm.KeyDown += optionsMenu.OnKeyDown!;

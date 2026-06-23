@@ -17,7 +17,7 @@ namespace MiniGames.MiniGames
         private Label livesLabel, scoreLabel, currentDifficultyLabel;
         private int lives, speed, score, maxScore;
         private Difficulty currentDifficulty;
-        private string assetsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\GameAssets");
+        private string assetsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameAssets");
         private GameData gameData;
         private GameResult result = new GameResult();
         public KalleAnkaEscapesGame(GameData data)

@@ -29,7 +29,7 @@ namespace MiniGames.MiniGames
 
         private string assetsPath = Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
-            @"..\..\..\GameAssets"
+            "GameAssets"
         );
 
         private bool gameOver = false;

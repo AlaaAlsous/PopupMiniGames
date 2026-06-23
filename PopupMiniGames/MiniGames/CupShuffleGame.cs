@@ -22,7 +22,7 @@ namespace MiniGames.MiniGames
         private bool inputLocked = false;
         private GameData gameData;
         private GameResult result = new GameResult();
-        private string assetsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\GameAssets");
+        private string assetsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameAssets");
         public CupGuessGame(GameData gameData)
         {
             this.gameData = gameData;

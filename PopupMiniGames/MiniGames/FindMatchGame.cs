@@ -28,7 +28,7 @@ namespace MiniGames.MiniGames
         private GameResult result = new GameResult();
         private string findMatchPath = Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
-            @"..\..\..\GameAssets\FindMatchImages"
+            "GameAssets", "FindMatchImages"
         );
        
 
